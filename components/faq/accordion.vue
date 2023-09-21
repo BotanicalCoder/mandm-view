@@ -5,7 +5,7 @@
         class="flex w-full justify-between gap-4 items-center rounded-lg bg-orange-100 px-4 py-4 text-left text-sm font-medium text-gray-500 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
         @click="handleToggle(open)"
       >
-        <p class="w-[80%] text-gray-700 font-bold capitalize">{{
+        <p class="w-[80%] text-lg text-gray-700 font-bold capitalize">{{
           props.item.question
         }}</p>
 
@@ -18,7 +18,7 @@
         />
       </DisclosureButton>
       <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
-        <p>
+        <p class="text-base">
           {{ props.item.answer }}
         </p>
       </DisclosurePanel>
