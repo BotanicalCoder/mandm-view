@@ -7,11 +7,11 @@
           <Icon
             name="material-symbols:arrow-back-ios"
             size="20"
-            color="black"
+            color="white"
             @click="goBack"
             class="cursor-pointer"
           />
-          <p class="text-gray-800 text-xl font-bold text-center w-full">
+          <p class="text-white text-xl font-bold text-center w-full">
             Frequently asked questions
           </p>
         </div>
@@ -30,7 +30,7 @@
 
         <button
           class="w-fit bg-orange-200 p-3 rounded-xl my-8"
-          v-if="faqData.next_page_url"
+          v-if="faqData?.next_page_url"
           @click="loadNextPage"
         >
           {{ isLoading ? "Loading......" : "Load more" }}
@@ -51,10 +51,12 @@
 
 <script setup lang="ts">
 // import { faqs } from "@/contants/faq";
+// import { ref, watchEffect } from "vue";
+// import { useRouter } from "#vue-router";
 import axiosinstance from "@/libs/axiosinstance";
 
 const $router = useRouter();
-const goBack = () => $router.back();
+const goBack = () => navigateTo("/");
 
 const isLoading = ref(false);
 const currentPage = ref(1);

@@ -4,11 +4,11 @@
       <template v-slot:header>
         <!-- content for the header slot -->
         <div class="flex items-center">
-          <Icon name="material-symbols:arrow-back-ios" size="20" color="black" @click="goBack" 
+          <Icon name="material-symbols:arrow-back-ios" size="20" color="white" @click="goBack" 
           class="cursor-pointer"
           
           />
-          <p class="text-gray-800 text-xl font-bold text-center w-full">
+          <p class="text-white text-xl font-bold text-center w-full">
             Call Us
           </p>
         </div>
@@ -17,10 +17,10 @@
       <div class="flex flex-col h-full justify-center p-4 items-center gap-8">
         <img src="/images/contact-us.jpg" class="w-[15rem] rounded-3xl" />
         <div class="text-center">
-          <h3 class="text-gray-800 font-bold text-xl">
+          <h3 class="text-gray-700 font-bold text-xl">
             Reach out to us today
           </h3>
-          <p class="text-gray-800 font-thin text-sm">
+          <p class="text-gray-700 font-thin text-sm">
             Our Phone lines are open from
             <span class="font-normal">8:00 AM</span>
             to
@@ -28,7 +28,7 @@
           </p>
         </div>
 
-        <p class="text-gray-800 font-thin text-md w-full px-3">
+        <p class="text-gray-700 font-thin text-md w-full px-3">
           Call us on:
           <br />
           <p class="flex flex-wrap gap-4" >

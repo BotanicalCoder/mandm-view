@@ -7,11 +7,11 @@
           <Icon
             name="material-symbols:arrow-back-ios"
             size="20"
-            color="black"
+            color="white"
             @click="goBack"
             class="cursor-pointer"
           />
-          <p class="text-gray-800 text-xl font-bold text-center w-full">
+          <p class="text-white text-xl font-bold text-center w-full">
             Our Social Media Handles
           </p>
         </div>
@@ -27,7 +27,7 @@
         >
           <Icon
             name="skill-icons:instagram"
-            size="90"
+            size="60"
             color="#003399"
             :is-external="true"
           />
@@ -38,7 +38,7 @@
           link="https://twitter.com/kolomoniagent"
           :is-external="true"
         >
-          <Icon name="skill-icons:twitter" size="90" color="#003399" />
+          <Icon name="skill-icons:twitter" size="60" color="#003399" />
         </card>
 
         <card
@@ -46,7 +46,7 @@
           link=" https://wa.me/9132623643"
           :is-external="true"
         >
-          <Icon name="logos:whatsapp-icon" size="90" color="#003399" />
+          <Icon name="logos:whatsapp-icon" size="60" color="#003399" />
         </card>
 
         <card
@@ -54,7 +54,7 @@
           link="https://www.facebook.com/Kolomoni.ng"
           :is-external="true"
         >
-          <Icon name="logos:facebook" size="90" color="#003399" />
+          <Icon name="logos:facebook" size="60" color="#003399" />
         </card>
       </div>
     </NuxtLayout>
@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts">
+// import { useRouter } from "#vue-router";
 const $router = useRouter();
 const goBack = () => $router.back();
 </script>
