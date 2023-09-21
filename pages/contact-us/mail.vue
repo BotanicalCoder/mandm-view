@@ -7,11 +7,11 @@
           <Icon
             name="material-symbols:arrow-back-ios"
             size="20"
-            color="black"
+            color="white"
             @click="goBack"
             class="cursor-pointer"
           />
-          <p class="text-gray-800 text-xl font-bold text-center w-full">
+          <p class="text-white text-xl font-bold text-center w-full">
             Send us a mail
           </p>
         </div>
@@ -22,9 +22,7 @@
       >
         <img src="/images/contact-us.jpg" class="w-[15rem] rounded-3xl" />
         <div class="text-center flex flex-col gap-4">
-          <h3 class="text-gray-800 font-bold text-xl">
-            Send us your complaint
-          </h3>
+          <h3 class="text-gray-800 font-bold text-xl"> Send us your complaint </h3>
           <!-- <p class="text-gray-800 font-thin text-sm">
               Our Phone lines are open from
               <span class="font-normal">8:00 AM</span>
@@ -74,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+// import { reactive } from "vue";
 import { Email } from "@/assets/smtp/smtp.js";
 const $router = useRouter();
 const goBack = () => $router.back();

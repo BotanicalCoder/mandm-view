@@ -7,11 +7,11 @@
           <Icon
             name="material-symbols:arrow-back-ios"
             size="20"
-            color="black"
+            color="white"
             @click="returnHome"
             class="cursor-pointer"
           />
-          <p class="text-gray-800 text-xl font-bold text-center w-full">
+          <p class="text-white text-xl font-bold text-center w-full">
             Contact Us
           </p>
         </div>
@@ -23,7 +23,7 @@
         <card text="Call Us" link="/contact-us/phone/">
           <Icon
             name="material-symbols:phone-forwarded-outline"
-            size="90"
+            size="60"
             color="#003399"
           />
         </card>
@@ -31,7 +31,7 @@
         <card text="Social Media" link="/contact-us/socials/">
           <Icon
             name="fluent:people-community-20-regular"
-            size="90"
+            size="60"
             color="#003399"
           />
         </card>
