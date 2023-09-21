@@ -1,10 +1,10 @@
 <template>
   <div
-    class="h-18 w-[9.5rem] m-1 p-4 flex flex-col items-center gap-3 bg-gray-100 rounded-xl cursor-pointer hover:bg-none focus:bg-none"
+    class="h-18 w-[9.5rem] m-1 p-4 flex flex-col items-center gap-3 bg-gray-100 rounded-xl cursor-pointer"
     @click="async () => navigate(link)"
   >
     <slot></slot>
-    <p class="text-gray-500">{{ props.text }}</p>
+    <p class="text-gray-500 text-center">{{ props.text }}</p>
   </div>
 </template>
 
