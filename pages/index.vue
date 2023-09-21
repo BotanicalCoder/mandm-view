@@ -5,7 +5,7 @@
         <!-- content for the header slot -->
         <div class="flex items-center">
           <!-- <Icon name="material-symbols:close-rounded" size="20" color="black" /> -->
-          <p class="text-gray-800 text-xl font-bold text-center w-full">
+          <p class="text-white text-xl font-bold text-center w-full">
             Get Help
           </p>
         </div>
@@ -17,25 +17,34 @@
         <card text="Contact Us" link="/contact-us">
           <Icon
             name="material-symbols:connect-without-contact"
-            size="90"
+            size="50"
             color="#003399"
           />
         </card>
 
-        <!-- <card text="User Manual" link="user-manual">
-          <Icon
-            name="ic:round-menu-book"
-            size="90"
-            color="#FF6600"
-            class="select-none"
-          />
-        </card> -->
-
         <card text="F.A.Q" link="/faq">
           <Icon
             name="streamline:interface-help-question-circle-circle-faq-frame-help-info-mark-more-query-question"
-            size="90"
+            size="50"
             color="#003399"
+          />
+        </card>
+
+        <card text="User Manual" link="user-manual">
+          <Icon
+            name="ic:round-menu-book"
+            size="50"
+            color="#003399"
+            class="select-none"
+          />
+        </card>
+
+        <card text="T & C" link="tnc">
+          <Icon
+            name="solar:book-line-duotone"
+            size="50"
+            color="#003399"
+            class="select-none"
           />
         </card>
       </div>
