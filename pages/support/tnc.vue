@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NuxtLayout>
-      <template v-slot:header>
+    <NuxtLayout name="support">
+      <template #header>
         <!-- content for the header slot -->
         <div class="flex items-center">
           <Icon
@@ -17,9 +17,11 @@
         </div>
       </template>
 
-      <div class="mt-[5rem] flex items-center justify-center">
-        <h2 class="text-4xl"> Coming soon </h2>
-      </div>
+      <template #body>
+        <div class="mt-[5rem] flex items-center justify-center">
+          <h2 class="text-4xl"> Coming soon </h2>
+        </div>
+      </template>
     </NuxtLayout>
   </div>
 </template>

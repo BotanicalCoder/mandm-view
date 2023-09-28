@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NuxtLayout>
-      <template v-slot:header>
+    <NuxtLayout name="support">
+      <template #header>
         <!-- content for the header slot -->
         <div class="flex items-center">
           <Icon name="material-symbols:arrow-back-ios" size="20" color="white" @click="goBack" 
@@ -13,6 +13,8 @@
           </p>
         </div>
       </template>
+
+      <template #body>
 
       <div class="flex flex-col h-full justify-center p-4 items-center gap-8">
         <img src="/images/contact-us.jpg" class="w-[15rem] rounded-3xl" />
@@ -45,6 +47,8 @@
           
         </p>
       </div>
+    </template>
+
     </NuxtLayout>
   </div>
 </template>

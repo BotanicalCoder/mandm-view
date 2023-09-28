@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NuxtLayout>
-      <template v-slot:header>
+    <NuxtLayout name="support">
+      <template #header>
         <!-- content for the header slot -->
         <div class="flex items-center">
           <Icon
@@ -17,34 +17,36 @@
         </div>
       </template>
 
-      <div
-        class="mb-12 h-full flex flex-col w-full items-center"
-        v-if="!isLoading"
-      >
+      <template #body>
         <div
-          class="flex flex-col w-full h-full justify-center p-0 items-center gap-8"
-          v-for="item in faqs || []"
+          class="mb-12 h-full flex flex-col w-full items-center"
+          v-if="!isLoading"
         >
-          <faq-accordion :item="item" />
-        </div>
+          <div
+            class="flex flex-col w-full h-full justify-center p-0 items-center gap-8"
+            v-for="item in faqs || []"
+          >
+            <faq-accordion :item="item" />
+          </div>
 
-        <button
-          class="w-fit bg-orange-200 p-3 rounded-xl my-8"
-          v-if="faqData?.next_page_url"
-          @click="loadNextPage"
-        >
-          {{ isLoading ? "Loading......" : "Load more" }}
-        </button>
+          <button
+            class="w-fit bg-orange-200 p-3 rounded-xl my-8"
+            v-if="faqData?.next_page_url"
+            @click="loadNextPage"
+          >
+            {{ isLoading ? "Loading......" : "Load more" }}
+          </button>
 
-        <!-- <pagination
+          <!-- <pagination
           :current-page="currentPage"
           :total-items="faqData.p"
           @click-handler="onClickHandler"
         /> -->
-      </div>
-      <div class="w-full my-[5rem] flex items-center justify-center" v-else>
-        <Icon name="line-md:loading-twotone-loop" size="90" />
-      </div>
+        </div>
+        <div class="w-full my-[5rem] flex items-center justify-center" v-else>
+          <Icon name="line-md:loading-twotone-loop" size="90" />
+        </div>
+      </template>
     </NuxtLayout>
   </div>
 </template>
