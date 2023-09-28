@@ -25,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-const goBack = () => navigateTo("/");
+const $router = useRouter();
+const goBack = () => $router.back();
 </script>
 
 <style scoped></style>

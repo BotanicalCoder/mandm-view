@@ -56,7 +56,7 @@
 import axiosinstance from "@/libs/axiosinstance";
 
 const $router = useRouter();
-const goBack = () => navigateTo("/");
+const goBack = () => $router.back();
 
 const isLoading = ref(false);
 const currentPage = ref(1);
