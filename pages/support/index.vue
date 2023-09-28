@@ -14,7 +14,7 @@
       <div
         class="flex flex-row h-full p-4 items-center justify-center gap-4 flex-wrap"
       >
-        <card text="Contact Us" link="/contact-us">
+        <card text="Contact Us" link="/support/contact-us">
           <Icon
             name="material-symbols:connect-without-contact"
             size="50"
@@ -22,7 +22,7 @@
           />
         </card>
 
-        <card text="F.A.Q" link="/faq">
+        <card text="F.A.Q" link="/support/faq">
           <Icon
             name="streamline:interface-help-question-circle-circle-faq-frame-help-info-mark-more-query-question"
             size="50"
@@ -30,7 +30,7 @@
           />
         </card>
 
-        <card text="User Manual" link="user-manual">
+        <card text="User Manual" link="/support/user-manual">
           <Icon
             name="ic:round-menu-book"
             size="50"
@@ -39,7 +39,7 @@
           />
         </card>
 
-        <card text="T & C" link="tnc">
+        <card text="T & C" link="/support/tnc">
           <Icon
             name="solar:book-line-duotone"
             size="50"
