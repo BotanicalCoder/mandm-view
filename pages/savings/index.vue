@@ -70,9 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import axiosinstance from "~/libs/axiosinstance";
-import formatToCurrency from "../../utils/formatToCurrency";
-
 const { $fetchToken, $getToken } = useNuxtApp();
 
 const userToken = ref<string | null>(null);
