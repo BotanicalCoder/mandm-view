@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NuxtLayout name="savings">
+    <NuxtLayout name="support">
       <template #header>
         <!-- content for the header slot -->
         <div class="flex items-center">
