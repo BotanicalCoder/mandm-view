@@ -10,8 +10,9 @@
 
       <div class="flex flex-col justify-center p-4 gap-5 text-[#003399]" v-else>
         <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-[#3861b4]"
-          >Our Saving Plans
+          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
+        >
+          Saving Plans
           <!-- <Icon name="clarity:coin-bag-line" size="20" /> -->
         </h3>
 
@@ -33,16 +34,12 @@
 
           <div class="flex flex-col gap-3 divide-y border-t">
             <div
-              class="flex gap-3 pt-2"
+              class="flex gap-3 pt-2 bg-[#3861b4] text-white p-2 rounded-lg"
               v-for="plan in data"
               :key="plan.id"
               @click="async () => await navigateTo(getLinks(plan.save_type))"
             >
-              <Icon
-                :name="getIcons(plan.save_type)"
-                size="40"
-                color="#5e84d0"
-              />
+              <Icon :name="getIcons(plan.save_type)" size="40" color="white" />
 
               <div class="flex items-center gap-2">
                 <div class="flex flex-col">
@@ -56,7 +53,7 @@
                       >Save a part of your earnings</p
                     > -->
                   </div>
-                  <p class="font-bold text-sm text-[#3861b4]">
+                  <p class="font-medium text-sm text-white">
                     {{ plan.interest_rate }}% Interest
                   </p>
                 </div>
@@ -116,20 +113,20 @@ const { data, pending, error } = useFetch<SavingsObject[]>(
   }
 );
 
-watchEffect(async () => {
-  try {
-    // const data = axiosinstance.get("savings/savings-plan", {
-    //   headers: {
-    //     Authorization: "Bearer " + userToken.value,
-    //   },
-    // });
-    // console.log(userToken.value);
-    console.log(data.value);
-    console.log(pending.value);
-  } catch (error) {
-    console.log(error);
-  }
-});
+// watchEffect(async () => {
+//   try {
+//     // const data = axiosinstance.get("savings/savings-plan", {
+//     //   headers: {
+//     //     Authorization: "Bearer " + userToken.value,
+//     //   },
+//     // });
+//     // console.log(userToken.value);
+//     console.log(data.value);
+//     console.log(pending.value);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 const getIcons = (save_type: string) => {
   if (save_type == "kolo_savings") {
