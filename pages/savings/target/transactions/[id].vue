@@ -33,6 +33,27 @@
 
         <div class="grid grid-cols-2 gap-4 mt-4">
           <div class="flex flex-col items-center">
+            <p class="text-sm"> Plan Name </p>
+            <h4 class="font-medium text-[1.3rem]">
+              {{ data?.data[0]?.target_savings.save_label }}
+            </h4>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <p class="text-sm"> End Date </p>
+            <h4 class="font-medium text-[1.3rem]">
+              {{ data?.data[0]?.target_savings.end_date }}
+            </h4>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <p class="text-sm"> Debit Source</p>
+            <h4 class="font-medium text-[1.1rem] capitalize">
+              {{ moment(data?.data[0]?.debit_source) }}
+            </h4>
+          </div>
+
+          <div class="flex flex-col items-center">
             <p class="text-sm"> Amount </p>
             <h4 class="font-medium text-[1.3rem]">
               {{
