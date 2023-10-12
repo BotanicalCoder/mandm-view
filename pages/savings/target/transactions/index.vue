@@ -7,7 +7,10 @@
       >
         <Icon name="line-md:loading-twotone-loop" size="90" />
       </div>
-      <div class="flex flex-col justify-center p-4 gap-2 text-[#003399]" v-else>
+      <div
+        class="flex flex-col justify-center p-4 gap-2 text-[#00339986]"
+        v-else
+      >
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -96,8 +99,6 @@
 </template>
 
 <script setup lang="ts">
-// import formatToCurrency from "../../utils/formatToCurrency";
-// import axiosinstance from "../../../libs/axiosinstance";
 import moment from "moment";
 
 interface Target_Savings {
@@ -122,7 +123,6 @@ interface Datum {
   savings_id: number;
   tid: string;
   debit_amount: string;
-
   target_savings: Target_Savings;
 }
 
