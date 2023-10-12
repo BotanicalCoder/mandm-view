@@ -3,7 +3,7 @@
     <NuxtLayout name="savings">
       <div class="flex flex-col p-4 gap-4">
         <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-[#3861b4]"
+          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
           Create Target Savings
         </h3>
