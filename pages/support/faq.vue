@@ -80,10 +80,9 @@ watchEffect(async () => {
     let res = await axiosinstance.get(`/faq/getfaq?page=${currentPage.value}`);
     if (res.data) {
       let decodedData = JSON.parse(atob(res.data));
-      // console.log(decodedData);
       faqData.value = decodedData;
 
-      faqs.value.push(...(decodedData.data as []));
+      faqs.value.unshift(...(decodedData.data as []));
     }
   } catch (error) {
     console.log(error);
