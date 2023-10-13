@@ -275,7 +275,7 @@ const savePlan = async () => {
             : targetSavings.debitfrequency.value == "weekly"
             ? targetSavings.debitday.value
             : targetSavings.debitfrequency.value == "monthly"
-            ? targetSavings.debitfrequencydate
+            ? targetSavings.debitfrequencydate.getDate()
             : null,
         debitsource: targetSavings.debitsource.value,
       },
