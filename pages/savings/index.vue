@@ -12,34 +12,36 @@
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
-          Saving Plans
-          <!-- <Icon name="clarity:coin-bag-line" size="20" /> -->
+          <Icon
+            name="material-symbols:arrow-back-ios"
+            size="20"
+            color="black"
+            class="cursor-pointer"
+            @click="goBack"
+          />
+          <span> Saving Plans</span>
         </h3>
 
-        <div class="px-0 flex flex-col gap-3">
-          <!-- not ready -->
-          <!-- <div class="flex gap-3 flex-wrap justify-between">
-            <div
-              class="h-[3.5rem] text-[#3861b4] rounded flex items-center justify-center font-bold text-lg"
-            >
-              {{ formatToCurrency(Number(1000000), true, true, "NGN") }}
-              Invested
-            </div>
-            <div
-              class="h-[3.5rem] text-[#3861b4] rounded flex items-center justify-center font-bold text-lg"
-            >
-              {{ formatToCurrency(Number(1000), true, true, "NGN") }} Gained
-            </div>
-          </div> -->
+        <div
+          v-if="error"
+          class="w-full h-screen flex items-center justify-center"
+        >
+          <p class="text-black text-xl"> Something went wrong </p>
+        </div>
 
+        <div class="px-0 flex flex-col gap-3" v-else>
           <div class="flex flex-col gap-3 divide-y border-t">
             <div
-              class="flex gap-3 pt-2 bg-[#3861b4] text-white p-2 rounded-lg"
+              class="flex gap-3 pt-2 bg-[#ffffff] text-black p-2 rounded-lg"
               v-for="plan in data"
               :key="plan.id"
               @click="async () => await navigateTo(getLinks(plan.save_type))"
             >
-              <Icon :name="getIcons(plan.save_type)" size="40" color="white" />
+              <Icon
+                :name="getIcons(plan.save_type)"
+                size="40"
+                color="#3861b4"
+              />
 
               <div class="flex items-center gap-2">
                 <div class="flex flex-col">
@@ -53,7 +55,7 @@
                       >Save a part of your earnings</p
                     > -->
                   </div>
-                  <p class="font-medium text-sm text-white">
+                  <p class="font-medium text-sm text-black">
                     {{ plan.interest_rate }}% Interest
                   </p>
                 </div>
@@ -67,17 +69,15 @@
 </template>
 
 <script setup lang="ts">
-const { $fetchToken, $getToken } = useNuxtApp();
+// const { $fetchToken, $getToken } = useNuxtApp();
+import { useMyAuthDataStore } from "../../stores/authData";
 
-const userToken = ref<string | null>(null);
+const dataStore = useMyAuthDataStore();
 
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
+const $router = useRouter();
+const goBack = () => $router.back();
 
-    userToken.value = $getToken();
-  }
-});
+const userToken = ref<string | null>(dataStore.token);
 
 interface SavingsObject {
   id: number;
@@ -112,21 +112,6 @@ const { data, pending, error } = useFetch<SavingsObject[]>(
     server: false,
   }
 );
-
-// watchEffect(async () => {
-//   try {
-//     // const data = axiosinstance.get("savings/savings-plan", {
-//     //   headers: {
-//     //     Authorization: "Bearer " + userToken.value,
-//     //   },
-//     // });
-//     // console.log(userToken.value);
-//     console.log(data.value);
-//     console.log(pending.value);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 const getIcons = (save_type: string) => {
   if (save_type == "kolo_savings") {

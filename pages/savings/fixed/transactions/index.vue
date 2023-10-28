@@ -33,14 +33,14 @@
               @click="
                 async () =>
                   await navigateTo(
-                    '/savings/target/transactions/' + transactionsData.id
+                    '/savings/fixed/transactions/' + transactionsData.id
                   )
               "
             >
               <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col col-span-2 text-lg">
                   <!-- <p> Name </p> -->
-                  <h4 class="font-bold capitalize"
+                  <h4 class="font-bold capitalize truncate"
                     >{{ transactionsData.narration }}
                   </h4>
                 </div>
@@ -148,7 +148,7 @@ const loadNextPage = () => {
 };
 
 const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-target-transactions",
+  "https://kams.kolomoni.ng/api/savings/view-fixed-savings-transactions",
   {
     method: "get",
     headers: {
@@ -166,14 +166,29 @@ const { data, pending, error } = useFetch<RootObj>(
   }
 );
 
+function removeDuplicates(data: any) {
+  let jsonObject = data.map(JSON.stringify);
+  let uniqueSet = new Set(jsonObject);
+  //@ts-ignore
+  let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+
+  return uniqueArray;
+}
+
 watchEffect(() => {
   if (data.value) {
-    console.log(data.value);
-
-    transactions.value.splice(0, 0, ...data.value?.data);
+    transactions.value = removeDuplicates(data.value?.data);
   }
-  console.log(transactions.value);
 });
+
+// watchEffect(() => {
+//   if (data.value) {
+//     console.log(data.value);
+
+//     transactions.value.splice(0, 0, ...data.value?.data);
+//   }
+//   console.log(transactions.value);
+// });
 </script>
 
 <style scoped></style>

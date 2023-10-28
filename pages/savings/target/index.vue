@@ -11,7 +11,14 @@
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
-          Target Savings
+          <Icon
+            name="material-symbols:arrow-back-ios"
+            size="20"
+            color="black"
+            class="cursor-pointer"
+            @click="goBack"
+          />
+          <span> Target Savings </span>
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
@@ -29,36 +36,36 @@
             </div>
           </div> -->
 
-          <div class="flex flex-row justify-between">
+          <div class="flex flex-row flex-wrap justify-between mt-4">
             <button
-              class="border border-[#3861b4] text-[#3861b4] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
+              class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
               @click="async () => navigateTo('/savings/target/create')"
             >
-              <Icon name="fluent:add-12-filled" size="20" color="#5e84d0" />
+              <Icon name="fluent:add-12-filled" size="20" color="#ffffff" />
 
-              Create Plan
+              Create
             </button>
 
             <button
-              class="border border-[#3861b4] text-[#3861b4] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
+              class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
               @click="async () => navigateTo('/savings/target/transactions')"
             >
-              <Icon name="ph:eye-light" size="20" color="#5e84d0" />
+              <Icon name="ph:eye-light" size="20" color="#ffffff" />
 
-              View Transactions
+              Transactions
             </button>
           </div>
 
           <div class="flex flex-col gap-3 mt-4">
             <div
-              class="flex flex-col p-3 border bg-[#3861b4] text-white rounded-lg"
+              class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
               v-for="(savingsData, index) in targetSavings"
               @click="
                 async () =>
                   await navigateTo('/savings/target/' + savingsData.id)
               "
             >
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-2">
                 <div class="flex flex-col col-span-2 text-lg">
                   <!-- <p> Name </p> -->
                   <h4 class="font-bold capitalize"
@@ -81,41 +88,7 @@
                     }}
                   </h4>
                 </div>
-
-                <div class="flex flex-col">
-                  <p> Current Balance </p>
-                  <h4 class="text-base font-medium">
-                    <!-- {{ savingsData.wallet.current_balance }} -->
-
-                    {{
-                      formatToCurrency(
-                        parseInt(savingsData.wallet.current_balance) || 0,
-                        true,
-                        true,
-                        "NGN"
-                      )
-                    }}
-                  </h4>
-                </div>
-
-                <div class="flex flex-col">
-                  <p> Interest Earned </p>
-                  <h4 class="text-base font-medium">
-                    {{
-                      formatToCurrency(
-                        savingsData.interest_sum_amount_paid || 0,
-                        true,
-                        true,
-                        "NGN"
-                      )
-                    }}
-                  </h4>
-                </div>
               </div>
-              <!-- <h4 class="text-base font-medium"
-                >{{ savingsData.save_label }}
-              </h4> -->
-              <!-- <p class="text-xs font-medium">Save a part of your earnings</p> -->
             </div>
 
             <button
@@ -133,9 +106,10 @@
 </template>
 
 <script setup lang="ts">
-// import formatToCurrency from "../../utils/formatToCurrency";
-// import axiosinstance from "../../../libs/axiosinstance";
+import { useMyAuthDataStore } from "../../../stores/authData";
 import moment from "moment";
+
+const dataStore = useMyAuthDataStore();
 
 interface Wallet {
   current_balance: string;
@@ -173,41 +147,17 @@ interface RootObj {
   data: Datum[];
 }
 
-const { $fetchToken, $getToken } = useNuxtApp();
+const userToken = ref<string | null>(dataStore.token);
 
-const userToken = ref<string | null>(null);
 const targetSavings = ref<Datum[]>([]);
 const currentPage = ref(1);
 
-// watchEffect(async () => {
-//   try {
-//     const data = axiosinstance.get("savings/view-target-savings", {
-//       headers: {
-//         Authorization: "Bearer " + userToken.value,
-//       },
-//       params: {
-//         is_single_record: false,
-//         longitude: "2039382",
-//         latitude: "08090932",
-//       },
-//     });
-//     console.log(userToken.value);
-//     console.log(await data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+const $router = useRouter();
+const goBack = () => $router.back();
 
 const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
-
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
-    userToken.value = $getToken();
-  }
-});
 
 const { data, pending, error } = useFetch<RootObj>(
   "https://kams.kolomoni.ng/api/savings/view-target-savings",
@@ -228,13 +178,30 @@ const { data, pending, error } = useFetch<RootObj>(
   }
 );
 
-watchEffect(() => {
-  // targetSavings.value = [...data.value?.data, targetSavings.value];
+function removeDuplicates(data: any) {
+  let jsonObject = data.map(JSON.stringify);
+  let uniqueSet = new Set(jsonObject);
+  //@ts-ignore
+  let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
 
+  return uniqueArray;
+}
+
+watchEffect(() => {
   if (data.value) {
-    targetSavings.value.splice(0, 0, ...data.value?.data);
+    targetSavings.value = removeDuplicates(data.value?.data);
   }
 });
+
+// http://localhost:3000/savings?data=%22{+%22tid%22:+%222057Q3G3%22,++%22token%22:+%22eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxNyIsImp0aSI6ImNiNzljNzhkMWZhMWRlM2U3Y2Y5MDZkNWJmYzNkYWU1NDdiMTEyMjRiYWQ0ZGRlNzUwNjM2YmM5M2QwODg4NWFkMjQwZjQ0YTJjYWYzYzc4IiwiaWF0IjoxNjk4NDQ1MTg5LjgxMjY3MiwibmJmIjoxNjk4NDQ1MTg5LjgxMjY3NCwiZXhwIjoxNzMwMDY3NTg5LjgxMTQwOCwic3ViIjoiNzE0MjEiLCJzY29wZXMiOlsiKiJdfQ.XR-UloGCuNE419zpsvz9EPjAZ19MmD3Onf3cEd2DhNcTCZAVPRSISugNSYaKXHAMelZkcxDAndcOdNVAnICEgWn8iAgK5LpPXShKEpFK-4jr-Qos2phUCJ1xBiRAGNolb1m8if-pC4pTlQDmasq2wHiQ1x9gZBoVFtGI-gEqT7PQ0lPGTZNy9FyenJlYlnrj4_Xy0S2-wGIrzQrNrpNyXIqeHsTcOJfEYNplwzlOpjZlSwG--dE5d8WwFazZNUC5vOIlrX_pxVCq2CFfucieZkxyf2bFytI27sltFpf6wP4nJHDXUEKpKZms1KBs3xSSHaG1j5yEkpcGNQNzwgzNQVg6BN32Tdy9Q960VPQP1ZQV2Ip2u9V6Kix_8HaRpCLZjnzlHgclBJXw_0Gj9QfkvgUZyVNCw9P8Flrib6gmhsgJc3HtK1fgMiyR_0SX8HpKOyIATU_61jknKBgWjM2z9LeXllnsfYlTkho2WSo5IMb37CczCPu_RWUS8Q5YLq9PWsSqTbDlDPgs3o0Xl54E9GWLuGGHGCn7ltBQb5LNP5NZE7Xd5oACLqt63ATp6a6lbYNB6LA6ztrnpWxauE-ThK2qAXgkXwLV66NsOe2zxMyhIgOeQ7y5wfXKBNm9IlQjoElNq0cC368nxY20TZAhju5FCxlGwtVrxhULKVSAWkc%22,%22longitude%22:+%22237464.13%22,%22latitude%22:+%2210928.26%22}%27
+
+// data={
+//   tid: "22057Q3G3",
+//   token:
+//     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxNyIsImp0aSI6ImNiNzljNzhkMWZhMWRlM2U3Y2Y5MDZkNWJmYzNkYWU1NDdiMTEyMjRiYWQ0ZGRlNzUwNjM2YmM5M2QwODg4NWFkMjQwZjQ0YTJjYWYzYzc4IiwiaWF0IjoxNjk4NDQ1MTg5LjgxMjY3MiwibmJmIjoxNjk4NDQ1MTg5LjgxMjY3NCwiZXhwIjoxNzMwMDY3NTg5LjgxMTQwOCwic3ViIjoiNzE0MjEiLCJzY29wZXMiOlsiKiJdfQ.XR-UloGCuNE419zpsvz9EPjAZ19MmD3Onf3cEd2DhNcTCZAVPRSISugNSYaKXHAMelZkcxDAndcOdNVAnICEgWn8iAgK5LpPXShKEpFK-4jr-Qos2phUCJ1xBiRAGNolb1m8if-pC4pTlQDmasq2wHiQ1x9gZBoVFtGI-gEqT7PQ0lPGTZNy9FyenJlYlnrj4_Xy0S2-wGIrzQrNrpNyXIqeHsTcOJfEYNplwzlOpjZlSwG--dE5d8WwFazZNUC5vOIlrX_pxVCq2CFfucieZkxyf2bFytI27sltFpf6wP4nJHDXUEKpKZms1KBs3xSSHaG1j5yEkpcGNQNzwgzNQVg6BN32Tdy9Q960VPQP1ZQV2Ip2u9V6Kix_8HaRpCLZjnzlHgclBJXw_0Gj9QfkvgUZyVNCw9P8Flrib6gmhsgJc3HtK1fgMiyR_0SX8HpKOyIATU_61jknKBgWjM2z9LeXllnsfYlTkho2WSo5IMb37CczCPu_RWUS8Q5YLq9PWsSqTbDlDPgs3o0Xl54E9GWLuGGHGCn7ltBQb5LNP5NZE7Xd5oACLqt63ATp6a6lbYNB6LA6ztrnpWxauE-ThK2qAXgkXwLV66NsOe2zxMyhIgOeQ7y5wfXKBNm9IlQjoElNq0cC368nxY20TZAhju5FCxlGwtVrxhULKVSAWkc",
+//   longitude: "22237464.13",
+//   latitude: "2210928.26",
+// }
 </script>
 
 <style scoped></style>

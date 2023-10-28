@@ -102,7 +102,7 @@ const { $fetchToken, $getToken } = useNuxtApp();
 const userToken = ref<string | null>(null);
 
 // @ts-ignore
-const { id } = params;
+const { transaction_id } = params;
 
 watchEffect(() => {
   if (process.browser) {
@@ -112,7 +112,7 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  console.log(id);
+  console.log(transaction_id);
 });
 
 // watchEffect(async () => {
@@ -184,7 +184,7 @@ const { data, pending, error } = useFetch<RootObj>(
       is_single_record: true,
       longitude: "2039382",
       latitude: "08090932",
-      single_record_id: id,
+      single_record_id: transaction_id,
     },
     key: "target-savings-transaction",
     server: false,

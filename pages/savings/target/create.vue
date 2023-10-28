@@ -5,7 +5,15 @@
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
-          Create Target Savings
+          <Icon
+            name="material-symbols:arrow-back-ios"
+            size="20"
+            color="black"
+            class="cursor-pointer"
+            @click="goBack"
+          />
+
+          Create Plan
         </h3>
         <input-text
           label="Savings Name"
@@ -133,7 +141,7 @@
         />
 
         <button
-          class="border border-[#3861b4] text-[#3861b4] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
+          class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
           @click="savePlan"
         >
           <Icon
@@ -141,7 +149,7 @@
               loading ? 'line-md:loading-twotone-loop' : 'fluent:add-12-filled'
             "
             size="20"
-            color="#5e84d0"
+            color="white"
           />
           {{ loading ? "Saving.." : "Save Plan" }}
         </button>
@@ -154,18 +162,14 @@
 import moment from "moment";
 import { toast } from "vue3-toastify";
 import axiosinstance from "../../../libs/axiosinstance";
+import { useMyAuthDataStore } from "../../../stores/authData";
 
-const { $fetchToken, $getToken } = useNuxtApp();
+const dataStore = useMyAuthDataStore();
 
-const userToken = ref<string | null>(null);
+const userToken = ref<string | null>(dataStore.token);
 
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
-
-    userToken.value = $getToken();
-  }
-});
+const $router = useRouter();
+const goBack = () => $router.back();
 
 const targetSavings = reactive({
   savingsname: "",
@@ -263,15 +267,13 @@ const savePlan = async () => {
       message: string;
       id: number;
     }>(
-      "/savings/create-target-savings",
+      "savings/create-target-savings",
       {
         ...targetSavings,
         debitfrequency: targetSavings.debitfrequency.value,
         debitfrequencytime:
           targetSavings.debitfrequency.value == "daily"
-            ? targetSavings.debitfrequencytime.hours +
-              ":" +
-              targetSavings.debitfrequencytime.minutes
+            ? moment(targetSavings.debitfrequencytime.hours).format("HH:mm")
             : targetSavings.debitfrequency.value == "weekly"
             ? targetSavings.debitday.value
             : targetSavings.debitfrequency.value == "monthly"
@@ -285,8 +287,6 @@ const savePlan = async () => {
         },
       }
     );
-
-    console.log(data);
 
     if (data.success) {
       toast.success(data.message);

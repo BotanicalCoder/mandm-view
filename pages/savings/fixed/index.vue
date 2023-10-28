@@ -7,10 +7,7 @@
       >
         <Icon name="line-md:loading-twotone-loop" size="90" />
       </div>
-      <div
-        class="flex flex-col justify-center p-4 gap-2 text-[#00339986]"
-        v-else
-      >
+      <div class="flex flex-col justify-center p-4 gap-2 text-[#003399]" v-else>
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -21,47 +18,65 @@
             class="cursor-pointer"
             @click="goBack"
           />
-
-          Transactons
+          <span> Fixed deposit </span>
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
+          <div class="flex flex-row flex-wrap justify-between mt-4">
+            <button
+              class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
+              @click="async () => navigateTo('/savings/fixed/create')"
+            >
+              <Icon name="fluent:add-12-filled" size="20" color="#ffffff" />
+
+              Create
+            </button>
+
+            <button
+              class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
+              @click="async () => navigateTo('/savings/fixed/transactions')"
+            >
+              <Icon name="ph:eye-light" size="20" color="#ffffff" />
+
+              Transactions
+            </button>
+          </div>
+
           <div class="flex flex-col gap-3 mt-4">
             <div
-              class="flex flex-col p-3 border bg-[white] text-black rounded-lg"
-              v-for="(transactionsData, index) in transactions"
+              class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
+              v-for="(savingsData, index) in targetSavings"
               @click="
-                async () =>
-                  await navigateTo(
-                    '/savings/target/transactions/' + transactionsData.id
-                  )
+                async () => await navigateTo('/savings/fixed/' + savingsData.id)
               "
             >
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-2">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <!-- <p> Name </p> -->
                   <h4 class="font-bold capitalize"
-                    >{{ transactionsData.narration }}
+                    >{{ savingsData.save_label }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p> Date </p>
+                  <p> Amount </p>
                   <h4 class="text-base font-medium">
                     {{
-                      moment(transactionsData.created_at).format(
-                        "DD, MMM, YYYY"
+                      formatToCurrency(
+                        +savingsData.amount || 0,
+                        true,
+                        true,
+                        "NGN"
                       )
                     }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p> Debit Amount </p>
+                  <p> Interest </p>
                   <h4 class="text-base font-medium">
                     {{
                       formatToCurrency(
-                        parseInt(transactionsData.debit_amount) || 0,
+                        +savingsData.interest_sum_amount_paid || 0,
                         true,
                         true,
                         "NGN"
@@ -82,44 +97,39 @@
           </div>
         </div>
       </div>
-
-      <div
-        class="h-screen flex justify-center items-center"
-        v-if="transactions.length == 0"
-      >
-        <h3 class="font-medium font-2xl"> No Transactions </h3>
-      </div>
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useMyAuthDataStore } from "../../../../stores/authData";
+import { useMyAuthDataStore } from "../../../stores/authData";
 import moment from "moment";
 
-interface Target_Savings {
-  id: number;
-  end_date: Date;
-  save_label: string;
-  date_created: Date;
+const dataStore = useMyAuthDataStore();
+
+interface Wallet {
+  current_balance: string;
+  wallet_id: number;
+  savings_id: number;
 }
 
 interface Datum {
-  id: number;
-  reference: string;
-  debit_reference: string;
-  amount: string;
-  oldbal: string;
-  newbal: string;
-  debit_source: string;
-  narration: string;
+  id: string;
+  tid: string;
+  unlock_date: Date;
+  save_label: string;
+  save_target: string;
   status: string;
   created_at: Date;
   updated_at: Date;
-  savings_id: number;
-  tid: string;
-  debit_amount: string;
-  target_savings: Target_Savings;
+  debit_source: string;
+  amount_debit: string;
+  when_debit: string;
+  debit_account_number: null | number;
+  interest_sum_amount_paid: number;
+  debit_day_time: string;
+  amount: string;
+  wallet: Wallet;
 }
 
 interface RootObj {
@@ -134,10 +144,9 @@ interface RootObj {
   data: Datum[];
 }
 
-const dataStore = useMyAuthDataStore();
-
 const userToken = ref<string | null>(dataStore.token);
-const transactions = ref<Datum[]>([]);
+
+const targetSavings = ref<Datum[]>([]);
 const currentPage = ref(1);
 
 const $router = useRouter();
@@ -148,7 +157,7 @@ const loadNextPage = () => {
 };
 
 const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-target-transactions",
+  "https://kams.kolomoni.ng/api/savings/view-fixed-savings",
   {
     method: "get",
     headers: {
@@ -160,19 +169,25 @@ const { data, pending, error } = useFetch<RootObj>(
       latitude: "08090932",
       page: currentPage.value,
     },
-    key: "all-target-savings-transactions",
+    key: "all-target-savings",
     server: false,
     watch: [currentPage],
   }
 );
 
+function removeDuplicates(data: any) {
+  let jsonObject = data.map(JSON.stringify);
+  let uniqueSet = new Set(jsonObject);
+  //@ts-ignore
+  let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+
+  return uniqueArray;
+}
+
 watchEffect(() => {
   if (data.value) {
-    console.log(data.value);
-
-    transactions.value.splice(0, 0, ...data.value?.data);
+    targetSavings.value = removeDuplicates(data.value?.data);
   }
-  console.log(transactions.value);
 });
 </script>
 

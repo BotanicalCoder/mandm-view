@@ -7,25 +7,17 @@
       >
         <Icon name="line-md:loading-twotone-loop" size="90" />
       </div>
-      <div
-        class="flex flex-col p-4 gap-4"
-        v-if="!pending && data?.data?.length > 0"
-      >
-        <Icon
-          name="material-symbols:arrow-back-ios"
-          size="20"
-          color="black"
-          class="cursor-pointer"
-          @click="goBack"
-        />
+      <div class="flex flex-col p-4 gap-4" v-else>
         <div
           class="w-full text-white text-center h-fit bg-[#3861b4] rounded-lg p-3"
         >
           <h3 class="font-bold text-[1.5rem] gap-2 p-2 my-auto capitalize">
-            {{ data?.data[0]?.narration || "--" }}
+            {{ data?.data[0].narration }}
           </h3>
 
           <h4 class="text-base font-medium">
+            <!-- {{ data?.data[0].interest_sum_amount_paid || 0 }} -->
+
             {{
               formatToCurrency(
                 parseInt(data?.data[0]?.debit_amount as string) || 0,
@@ -39,33 +31,12 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4 mt-4">
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Plan Name </p>
-            <h4 class="font-medium text-[1.1rem]">
-              {{ data?.data[0]?.target_savings?.save_label }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Date </p>
-            <h4 class="font-medium text-[1.1rem]">
-              {{ moment(data?.data[0]?.created_at).format("DD, MMM, YYYY") }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Debit Source</p>
-            <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ data?.data[0]?.debit_source }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
+          <div class="flex flex-col items-center">
             <p class="text-sm"> Amount </p>
             <h4 class="font-medium text-[1.3rem]">
               {{
                 formatToCurrency(
-                  parseInt(data?.data[0]?.amount as string) || 0,
+                  parseInt(data?.data[0].amount as string) || 0,
                   true,
                   true,
                   "NGN"
@@ -73,55 +44,50 @@
               }}
             </h4>
           </div>
-          <!-- 
+
           <div class="flex flex-col items-center">
             <p class="text-sm"> Debit Source</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ moment(data?.data[0]?.debit_source) }}
+              {{ moment(data?.data[0].debit_source) }}
             </h4>
-          </div> -->
+          </div>
 
-          <div class="flex flex-col items-start">
+          <div class="flex flex-col items-center">
             <p class="text-sm"> Status</p>
             <h4
               class="font-medium text-[1.1rem] capitalize"
               :class="[
-                data?.data[0]?.status == 'successful'
+                data?.data[0].status == 'successful'
                   ? 'text-green-700'
                   : 'text-red-700',
               ]"
             >
-              {{ data?.data[0]?.status }}
+              {{ data?.data[0].status }}
             </h4>
           </div>
 
-          <div class="flex flex-col items-start">
+          <div class="flex flex-col items-center">
             <p class="text-sm"> Date</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ moment(data?.data[0]?.created_at).format("DD, MMM, YYYY") }}
+              <!-- {{ data?.data[0].status }} -->
+              {{ moment(data?.data[0].created_at).format("DD, MMM, YYYY") }}
             </h4>
           </div>
 
-          <div class="flex flex-col items-start justify-start col-span-2">
+          <div class="flex flex-col items-center">
             <p class="text-sm"> Reference</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ data?.data[0]?.reference }}
+              {{ data?.data[0].reference }}
             </h4>
           </div>
 
-          <div class="flex flex-col items-start col-span-2">
+          <div class="flex flex-col items-center">
             <p class="text-sm"> Debit Reference</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ data?.data[0]?.debit_reference }}
+              {{ data?.data[0].debit_reference }}
             </h4>
           </div>
         </div>
-      </div>
-      <div
-        class="h-screen flex justify-center items-center"
-        v-if="data?.data?.length == 0"
-      >
-        <h3 class="font-medium font-2xl"> No Transactions </h3>
       </div>
     </NuxtLayout>
   </div>
@@ -129,22 +95,45 @@
 
 <script setup lang="ts">
 import moment from "moment";
-import { useMyAuthDataStore } from "../../../../stores/authData";
-
 const params = useRoute().params;
 
-const $router = useRouter();
-const goBack = () => $router.back();
+const { $fetchToken, $getToken } = useNuxtApp();
 
-const dataStore = useMyAuthDataStore();
-const userToken = ref<string | null>(dataStore.token);
+const userToken = ref<string | null>(null);
 
 // @ts-ignore
-const { id } = params;
+const { transaction_id } = params;
 
 watchEffect(() => {
-  console.log(id);
+  if (process.browser) {
+    $fetchToken();
+    userToken.value = $getToken();
+  }
 });
+
+watchEffect(() => {
+  console.log(transaction_id);
+});
+
+// watchEffect(async () => {
+//   try {
+//     const data = axiosinstance.get("savings/view-target-savings", {
+//       headers: {
+//         Authorization: "Bearer " + userToken.value,
+//       },
+//       params: {
+//         is_single_record: true,
+//         longitude: "2039382",
+//         latitude: "08090932",
+//          single_record_id:id
+//       },
+//     });
+//     console.log(userToken.value);
+//     console.log(await data);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 interface Target_Savings {
   id: number;
@@ -195,7 +184,7 @@ const { data, pending, error } = useFetch<RootObj>(
       is_single_record: true,
       longitude: "2039382",
       latitude: "08090932",
-      single_record_id: id,
+      single_record_id: transaction_id,
     },
     key: "target-savings-transaction",
     server: false,

@@ -22,15 +22,10 @@
               :displayValue="(item) => item.label"
               @change="query = $event.target.value"
             />
-            <!-- <ChevronDownIcon class="h-5 w-5 text-gray-800" aria-hidden="true" /> -->
+
             <span
               class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
             >
-              <!-- <ChevronDownIcon
-                class="w-5 h-5 text-gray-400"
-                aria-hidden="true"
-              /> -->
-
               <Icon name="uiw:down" size="20" />
             </span>
           </ComboboxButton>
@@ -67,16 +62,18 @@
               >
                 <span
                   class="block truncate"
-                  :class="{ 'font-medium': selected, 'font-normal': !selected }"
+                  :class="{
+                    'font-medium': item.label == props.modelValue.label,
+                    'font-normal': item.label != props.modelValue.label,
+                  }"
                 >
                   {{ item.label }}
                 </span>
                 <span
-                  v-if="selected"
+                  v-if="item.label == props.modelValue.label"
                   class="absolute inset-y-0 left-0 flex items-center pl-3"
                   :class="{ 'text-black': active, 'text-black': !active }"
                 >
-                  <!-- <CheckIcon class="h-5 w-5" aria-hidden="true" /> -->
                   <Icon name="uiw:check" size="20" color="#00000" />
                 </span>
               </li>

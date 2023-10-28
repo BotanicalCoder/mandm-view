@@ -14,27 +14,17 @@
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
-          <Icon
-            name="material-symbols:arrow-back-ios"
-            size="20"
-            color="black"
-            class="cursor-pointer"
-            @click="goBack"
-          />
-
-          Transactons
+          Kolo Savings Transactons
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
           <div class="flex flex-col gap-3 mt-4">
             <div
-              class="flex flex-col p-3 border bg-[white] text-black rounded-lg"
+              class="flex flex-col p-3 border bg-[#3861b4] text-white rounded-lg"
               v-for="(transactionsData, index) in transactions"
               @click="
                 async () =>
-                  await navigateTo(
-                    '/savings/target/transactions/' + transactionsData.id
-                  )
+                  await navigateTo('/savings/target/' + transactionsData.id)
               "
             >
               <div class="grid grid-cols-2 gap-3">
@@ -69,6 +59,28 @@
                     }}
                   </h4>
                 </div>
+
+                <!-- <div class="flex flex-col">
+                  <p> Target </p>
+                  <h4 class="text-base font-medium"
+                    >{{ savingsData.save_target }}
+                  </h4>
+                </div>
+
+      
+                <div class="flex flex-col">
+                  <p> Interest Earned </p>
+                  <h4 class="text-base font-medium">
+                    {{
+                      formatToCurrency(
+                        savingsData.interest_sum_amount_paid || 0,
+                        true,
+                        true,
+                        "NGN"
+                      )
+                    }}
+                  </h4>
+                </div> -->
               </div>
             </div>
 
@@ -82,19 +94,11 @@
           </div>
         </div>
       </div>
-
-      <div
-        class="h-screen flex justify-center items-center"
-        v-if="transactions.length == 0"
-      >
-        <h3 class="font-medium font-2xl"> No Transactions </h3>
-      </div>
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useMyAuthDataStore } from "../../../../stores/authData";
 import moment from "moment";
 
 interface Target_Savings {
@@ -134,21 +138,49 @@ interface RootObj {
   data: Datum[];
 }
 
-const dataStore = useMyAuthDataStore();
+import { useMyAuthDataStore } from "../../../stores/authData";
+
+// const { $fetchToken, $getToken } = useNuxtApp();
+
+const $router = useRouter();
+const goBack = () => $router.back();
 
 const userToken = ref<string | null>(dataStore.token);
 const transactions = ref<Datum[]>([]);
 const currentPage = ref(1);
 
-const $router = useRouter();
-const goBack = () => $router.back();
+// watchEffect(async () => {
+//   try {
+//     const data = axiosinstance.get("savings/view-target-transactions", {
+//       headers: {
+//         Authorization: "Bearer " + userToken.value,
+//       },
+//       params: {
+//         is_single_record: false,
+//         longitude: "2039382",
+//         latitude: "08090932",
+//       },
+//     });
+//     console.log(userToken.value);
+//     console.log(await data);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
 
+// watchEffect(() => {
+//   if (process.browser) {
+//     $fetchToken();
+//     userToken.value = $getToken();
+//   }
+// });
+
 const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-target-transactions",
+  "https://kams.kolomoni.ng/api/savings/view-kolo-savings-transactions",
   {
     method: "get",
     headers: {
@@ -168,8 +200,6 @@ const { data, pending, error } = useFetch<RootObj>(
 
 watchEffect(() => {
   if (data.value) {
-    console.log(data.value);
-
     transactions.value.splice(0, 0, ...data.value?.data);
   }
   console.log(transactions.value);

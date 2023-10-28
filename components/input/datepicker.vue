@@ -99,7 +99,7 @@ watchEffect(async () => {
   <div class="flex flex-col gap-1">
     <label :for="name" class="text-sm">{{ label }}</label>
     <p
-      class="flex items-center w-full px-2 py-1 border border-gray-300 rounded-lg relative"
+      class="flex items-center w-full px-2 py-1 border border-gray-300 rounded-lg relative bg-white"
     >
       <VueDatePicker
         @update:model-value="handleChange"

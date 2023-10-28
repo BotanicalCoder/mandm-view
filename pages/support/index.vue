@@ -4,7 +4,13 @@
       <template #header>
         <!-- content for the header slot -->
         <div class="flex items-center">
-          <!-- <Icon name="material-symbols:close-rounded" size="20" color="black" /> -->
+          <Icon
+            name="material-symbols:arrow-back-ios"
+            size="20"
+            color="white"
+            class="cursor-pointer"
+            @click="goBack"
+          />
           <p class="text-white text-xl font-bold text-center w-full">
             Get Help
           </p>
@@ -57,6 +63,10 @@
 
 <script setup lang="ts">
 import { Icon } from "#components";
+
+const $router = useRouter();
+const goBack = () => $router.back();
+
 definePageMeta({
   layout: "support",
 });

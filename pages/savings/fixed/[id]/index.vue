@@ -23,8 +23,6 @@
           </h3>
 
           <h4 class="text-base font-medium">
-            <!-- {{ data?.data[0].interest_sum_amount_paid || 0 }} -->
-
             {{
               formatToCurrency(
                 data?.data[0].interest_sum_amount_paid || 0,
@@ -36,28 +34,6 @@
             Earned
           </h4>
         </div>
-
-        <!-- <div class="flex flex-row justify-between">
-          <button
-            class="border border-[#3861b4] text-[#3861b4] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
-            @click="async () => navigateTo('/savings/target/create')"
-          >
-            <Icon name="fluent:add-12-filled" size="20" color="#5e84d0" />
-
-            New Plan
-          </button>
-
-          <button
-            class="border border-[#3861b4] text-[#3861b4] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
-            @click="
-              async () => navigateTo('/savings/target/' + id + '/transactions/')
-            "
-          >
-            <Icon name="ph:eye-light" size="20" color="#5e84d0" />
-
-            View Transactions
-          </button>
-        </div> -->
 
         <div class="flex flex-col gap-1">
           <div class="flex justify-between">
@@ -97,76 +73,6 @@
         </div>
 
         <div class="grid grid-cols-2 justify-between gap-6 mt-4">
-          <!-- <div class="flex flex-col items-start">
-            <p class="text-sm"> Current Balance </p>
-            <h4 class="font-medium text-base">
-              {{
-                formatToCurrency(
-                  parseInt(data?.data[0].wallet?.current_balance as string) ||
-                    0,
-                  true,
-                  true,
-                  "NGN"
-                )
-              }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Target </p>
-            <h4 class="font-medium text-base">
-              {{
-                formatToCurrency(
-                  parseInt(data?.data[0].save_target as string) || 0,
-                  true,
-                  true,
-                  "NGN"
-                )
-              }}
-            </h4>
-          </div> -->
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Start Date</p>
-            <h4 class="font-medium text-base capitalize">
-              <!-- {{ data?.data[0].status }} -->
-              {{ moment(data?.data[0].created_at).format("DD, MMM, YYYY") }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Unlock Date</p>
-            <h4 class="font-medium text-base capitalize">
-              {{ moment(data?.data[0].unlock_date).format("DD, MMM, YYYY") }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Debit Frequency</p>
-            <h4 class="font-medium text-base capitalize">
-              {{
-                formatToCurrency(
-                  parseInt(data?.data[0].amount_debit as string) || 0,
-                  true,
-                  true,
-                  "NGN"
-                )
-              }}, {{ data?.data[0].when_debit }}
-            </h4>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="text-sm"> Next Saving Date</p>
-            <h4 class="font-medium text-base capitalize">
-              {{
-                getNextDebitTime(
-                  data?.data[0].when_debit,
-                  data?.data[0].debit_day_time
-                )
-              }}
-            </h4>
-          </div>
-
           <div class="flex flex-col items-start">
             <p class="text-sm"> Debit Source</p>
             <h4 class="font-medium text-base capitalize">
@@ -196,43 +102,15 @@
 <script setup lang="ts">
 import moment from "moment";
 const params = useRoute().params;
-
-const { $fetchToken, $getToken } = useNuxtApp();
+const dataStore = useMyAuthDataStore();
 
 const $router = useRouter();
 const goBack = () => $router.back();
 
-const userToken = ref<string | null>(null);
+const userToken = ref<string | null>(dataStore.token);
 
 // @ts-ignore
 const { id } = params;
-
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
-    userToken.value = $getToken();
-  }
-});
-
-// watchEffect(async () => {
-//   try {
-//     const data = axiosinstance.get("savings/view-target-savings", {
-//       headers: {
-//         Authorization: "Bearer " + userToken.value,
-//       },
-//       params: {
-//         is_single_record: true,
-//         longitude: "2039382",
-//         latitude: "08090932",
-//          single_record_id:id
-//       },
-//     });
-//     console.log(userToken.value);
-//     console.log(await data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 interface Wallet {
   current_balance: string;
@@ -271,7 +149,7 @@ interface RootObj {
 }
 
 const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-target-savings",
+  "https://kams.kolomoni.ng/api/savings/view-fixed-savings",
   {
     method: "get",
     headers: {
@@ -287,10 +165,6 @@ const { data, pending, error } = useFetch<RootObj>(
     server: false,
   }
 );
-
-watchEffect(() => {
-  console.log(data.value);
-});
 
 const getNextDebitTime = (
   frequency: string | undefined,

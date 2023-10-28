@@ -18,28 +18,14 @@
             class="cursor-pointer"
             @click="goBack"
           />
-          <span> Transact And Save </span>
+          <span> Kolo </span>
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
-          <!-- <div class="flex gap-3 flex-wrap justify-between">
-            <div
-              class="h-[3rem] text-[#3861b4] rounded flex items-center justify-center font-bold text-lg"
-            >
-              {{ formatToCurrency(Number(1000000), true, true, "NGN") }}
-              Invested
-            </div>
-            <div
-              class="h-[3rem] text-[#3861b4] rounded flex items-center justify-center font-bold text-lg"
-            >
-              {{ formatToCurrency(Number(1000), true, true, "NGN") }} Gained
-            </div>
-          </div> -->
-
           <div class="flex flex-row flex-wrap justify-between mt-4">
             <button
               class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
-              @click="async () => navigateTo('/savings/transact-n-save/create')"
+              @click="async () => navigateTo('/savings/kolo/create')"
             >
               <Icon name="fluent:add-12-filled" size="20" color="#ffffff" />
 
@@ -48,7 +34,7 @@
 
             <button
               class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
-              @click="async () => navigateTo('/savings/target/transactions')"
+              @click="async () => navigateTo('/savings/kolo/transactions')"
             >
               <Icon name="ph:eye-light" size="20" color="#ffffff" />
 
@@ -56,38 +42,41 @@
             </button>
           </div>
 
+          <div class="flex flex-co text-black text-[1.2rem]">
+            <p>Agent Balance: </p>
+            &nbsp;
+            <p class="font-bold">
+              {{ formatToCurrency(balanceData?.amount, true, true, "NGN") }}
+            </p>
+          </div>
+
           <div class="flex flex-col gap-3 mt-4">
             <div
               class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
-              v-for="(savingsData, index) in transactNSave"
+              v-for="(savingsData, index) in koloSavings"
               @click="
-                async () =>
-                  await navigateTo('/savings/transact-n-save/' + savingsData.id)
+                async () => await navigateTo('/savings/kolo/' + savingsData.id)
               "
               :key="savingsData.id"
             >
               <div class="grid grid-cols-2 gap-2">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <!-- <p> Name </p> -->
                   <h4 class="font-bold capitalize"
                     >{{ savingsData.save_label }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p> Type </p>
+                  <p> Name </p>
                   <h4 class="text-base font-medium">
-                    {{
-                      savingsData?.dedution_type?.charAt(0).toUpperCase() +
-                      savingsData?.dedution_type?.slice(1)
-                    }}
+                    {{ savingsData?.fullname }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p>Amount </p>
-                  <h4 class="text-base font-medium">
-                    {{ savingsData.amount_deduction }}
+                  <p>Email </p>
+                  <h4 class="text-base font-medium truncate">
+                    {{ savingsData?.email }}
                   </h4>
                 </div>
               </div>
@@ -108,10 +97,6 @@
 </template>
 
 <script setup lang="ts">
-// import formatToCurrency from "../../utils/formatToCurrency";
-// import axiosinstance from "../../../libs/axiosinstance";
-// import moment from "moment";
-
 interface Datum {
   id: string;
   tid: string;
@@ -138,7 +123,7 @@ interface RootObj {
 
 import { useMyAuthDataStore } from "../../../stores/authData";
 
-const transactNSave = ref<Datum[]>([]);
+const koloSavings = ref<Datum[]>([]);
 const currentPage = ref(1);
 
 const dataStore = useMyAuthDataStore();
@@ -153,14 +138,14 @@ const loadNextPage = () => {
 };
 
 const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-transact-and-save",
+  "https://kams.kolomoni.ng/api/savings/view-kolo-savings",
   {
     method: "get",
     headers: {
       Authorization: "Bearer " + userToken.value,
     },
     params: {
-      is_single_record: false,
+      is_single_record: "false",
       longitude: "2039382",
       latitude: "08090932",
       page: currentPage.value,
@@ -170,6 +155,30 @@ const { data, pending, error } = useFetch<RootObj>(
     watch: [currentPage],
   }
 );
+
+const {
+  data: balanceData,
+  pending: balanceDataPending,
+  error: balanceDataError,
+} = useFetch<RootObj>(
+  "https://kams.kolomoni.ng/api/savings/view-koloajo-balance",
+  {
+    method: "get",
+    headers: {
+      Authorization: "Bearer " + userToken.value,
+    },
+    params: {
+      longitude: "2039382",
+      latitude: "08090932",
+      is_single_record: false,
+    },
+    key: "view-koloajo-balance",
+    server: false,
+    watch: [currentPage],
+  }
+);
+
+console.log(balanceData);
 
 function removeDuplicates(data: any) {
   let jsonObject = data.map(JSON.stringify);
@@ -182,7 +191,7 @@ function removeDuplicates(data: any) {
 
 watchEffect(() => {
   if (data.value) {
-    transactNSave.value = removeDuplicates(data.value?.data);
+    koloSavings.value = removeDuplicates(data.value?.data);
   }
 });
 </script>

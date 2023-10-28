@@ -1,6 +1,7 @@
 // import axiosinstance from "../libs/axiosinstance";
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const token = ref("hii");
   return {
     provide: {
       fetchToken: () =>

@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: false },
-  modules: ["nuxt-icon"],
+  modules: ["nuxt-icon", "@pinia/nuxt"],
   runtimeConfig: {
     public: {
       API_ENDPOINT: process.env.NUXT_API_ENDPOINT,
