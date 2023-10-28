@@ -43,8 +43,8 @@
 
 <script lang="ts" setup>
 import { toast } from "vue3-toastify";
-import axiosinstance from "../../../../libs/axiosinstance";
-import { useMyAuthDataStore } from "../../../../stores/authData";
+import axiosinstance from "../../../../../libs/axiosinstance";
+import { useMyAuthDataStore } from "../../../../../stores/authData";
 
 const params = useRoute().params;
 
