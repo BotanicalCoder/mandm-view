@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showSpinner"
+    v-if="!showSpinner"
     class="min-h-screen h-full lg:max-h-[40rem] lg:max-w-[50rem] lg:my-12 mx-auto bg-[#F2F2F2]"
   >
     <slot />
