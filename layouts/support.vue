@@ -36,7 +36,7 @@ const dataStore = useMyAuthDataStore();
 
 watchEffect(() => {
   if (route.query.data) {
-    console.log(route.query);
+    // console.log(route.query);
 
     // // console.log(
     // //   JSON.stringify({
