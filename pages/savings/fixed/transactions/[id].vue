@@ -24,28 +24,9 @@
           <h3 class="font-bold text-lg gap-2 p-2 my-auto capitalize">
             {{ data?.data[0]?.narration || "--" }}
           </h3>
-
-          <!-- <h4 class="text-base font-medium">
-            {{
-              formatToCurrency(
-                parseInt(data?.data[0]?.debit_amount as string) || 0,
-                true,
-                true,
-                "NGN"
-              )
-            }}
-            Debited
-          </h4> -->
         </div>
 
         <div class="grid grid-cols-2 gap-4 mt-4">
-          <!-- <div class="flex flex-col items-start">
-            <p class="text-sm"> Plan Name </p>
-            <h4 class="font-medium text-[1.1rem]">
-              {{ data?.data[0]?.target_savings?.save_label }}
-            </h4>
-          </div> -->
-
           <div class="flex flex-col items-start">
             <p class="text-sm"> Date </p>
             <h4 class="font-medium text-[1.1rem]">

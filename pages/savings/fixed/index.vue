@@ -97,7 +97,7 @@
           </div>
 
           <div
-            class="h-full my-12 flex justify-center items-center"
+            class="h-full my-[6rem] flex justify-center items-center"
             v-if="fixedSavings.length == 0"
           >
             <h3 class="font-medium font-3xl text-gray-700">

@@ -84,9 +84,17 @@
       </div>
 
       <div
-        class="h-screen flex justify-center items-center"
+        class="h-screen flex justify-center items-center relative"
         v-if="transactions.length == 0"
       >
+        <Icon
+          name="material-symbols:arrow-back-ios"
+          size="20"
+          color="black"
+          class="cursor-pointer absolute top-4 left-4"
+          @click="goBack"
+        />
+
         <h3 class="font-medium font-2xl"> No Transactions </h3>
       </div>
     </NuxtLayout>

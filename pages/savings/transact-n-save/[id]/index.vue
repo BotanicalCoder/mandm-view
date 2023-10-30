@@ -35,59 +35,13 @@
           </h4>
         </div>
 
-        <!-- <div class="flex flex-col gap-1">
-          <div class="flex justify-between">
-            <div class="flex flex-col items-start">
-              <p class="text-xs"> Current Balance </p>
-              <h4 class="font-medium text-sm">
-                {{
-                  formatToCurrency(
-                    parseInt(
-                      data?.data[0]?.wallet?.current_balance as string
-                    ) || 0,
-                    true,
-                    true,
-                    "NGN"
-                  )
-                }}
-              </h4>
-            </div>
-
-            <div class="flex flex-col items-start">
-              <p class="text-xs"> Target </p>
-              <h4 class="font-medium text-sm">
-                {{
-                  formatToCurrency(
-                    parseInt(data?.data[0]?.save_target as string) || 0,
-                    true,
-                    true,
-                    "NGN"
-                  )
-                }}
-              </h4>
-            </div>
-          </div>
-          <progress-bar
-            :goal="parseInt(data?.data[0]?.save_target as string) || 0"
-            :current=" parseInt(data?.data[0]?.wallet?.current_balance as string) ||0"
-          />
-        </div> -->
-
         <div class="grid grid-cols-2 justify-between gap-6 mt-4">
           <div class="flex flex-col items-start">
             <p class="text-sm"> Start Date</p>
             <h4 class="font-medium text-base capitalize">
-              <!-- {{ data?.data[0].status }} -->
               {{ moment(data?.data[0]?.created_at).format("DD, MMM, YYYY") }}
             </h4>
           </div>
-
-          <!-- <div class="flex flex-col items-start">
-            <p class="text-sm"> Unlock Date</p>
-            <h4 class="font-medium text-base capitalize">
-              {{ moment(data?.data[0]?.unlock_date).format("DD, MMM, YYYY") }}
-            </h4>
-          </div> -->
 
           <div class="flex flex-col items-start">
             <p class="text-sm">
