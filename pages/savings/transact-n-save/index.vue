@@ -22,20 +22,6 @@
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
-          <!-- <div class="flex gap-3 flex-wrap justify-between">
-            <div
-              class="h-[3rem] text-[#3861b4] rounded flex items-center justify-center font-bold text-lg"
-            >
-              {{ formatToCurrency(Number(1000000), true, true, "NGN") }}
-              Invested
-            </div>
-            <div
-              class="h-[3rem] text-[#3861b4] rounded flex items-center justify-center font-bold text-lg"
-            >
-              {{ formatToCurrency(Number(1000), true, true, "NGN") }} Gained
-            </div>
-          </div> -->
-
           <div class="flex flex-row flex-wrap justify-between mt-4">
             <button
               class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
@@ -56,7 +42,7 @@
             </button>
           </div>
 
-          <div class="flex flex-col gap-3 mt-4">
+          <div class="flex flex-col gap-3 mt-4" v-if="transactNSave.length > 0">
             <div
               class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
               v-for="(savingsData, index) in transactNSave"
@@ -111,6 +97,15 @@
             >
               {{ pending ? "Loading......" : "Load more" }}
             </button>
+          </div>
+
+          <div
+            class="h-full my-[6rem] flex justify-center items-center"
+            v-if="transactNSave.length == 0"
+          >
+            <h3 class="font-medium font-3xl text-gray-700">
+              No Transactions Savings
+            </h3>
           </div>
         </div>
       </div>
