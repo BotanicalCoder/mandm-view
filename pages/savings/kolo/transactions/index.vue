@@ -14,22 +14,30 @@
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
-          Kolo Savings Transactons
+          <Icon
+            name="material-symbols:arrow-back-ios"
+            size="20"
+            color="black"
+            class="cursor-pointer"
+            @click="goBack"
+          />
+          <span> Kolo Savings Transactons </span>
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
           <div class="flex flex-col gap-3 mt-4">
             <div
-              class="flex flex-col p-3 border bg-[#3861b4] text-white rounded-lg"
+              class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
               v-for="(transactionsData, index) in transactions"
               @click="
                 async () =>
-                  await navigateTo('/savings/target/' + transactionsData.id)
+                  await navigateTo(
+                    '/savings/kolo/transactions/' + transactionsData.id
+                  )
               "
             >
               <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <!-- <p> Name </p> -->
                   <h4 class="font-bold capitalize"
                     >{{ transactionsData.narration }}
                   </h4>
@@ -47,11 +55,11 @@
                 </div>
 
                 <div class="flex flex-col">
-                  <p> Debit Amount </p>
+                  <p> Amount </p>
                   <h4 class="text-base font-medium">
                     {{
                       formatToCurrency(
-                        parseInt(transactionsData.debit_amount) || 0,
+                        parseInt(transactionsData.amount) || 0,
                         true,
                         true,
                         "NGN"
@@ -59,28 +67,6 @@
                     }}
                   </h4>
                 </div>
-
-                <!-- <div class="flex flex-col">
-                  <p> Target </p>
-                  <h4 class="text-base font-medium"
-                    >{{ savingsData.save_target }}
-                  </h4>
-                </div>
-
-      
-                <div class="flex flex-col">
-                  <p> Interest Earned </p>
-                  <h4 class="text-base font-medium">
-                    {{
-                      formatToCurrency(
-                        savingsData.interest_sum_amount_paid || 0,
-                        true,
-                        true,
-                        "NGN"
-                      )
-                    }}
-                  </h4>
-                </div> -->
               </div>
             </div>
 
@@ -100,12 +86,18 @@
 
 <script setup lang="ts">
 import moment from "moment";
+import { useMyAuthDataStore } from "../../../../stores/authData";
 
-interface Target_Savings {
-  id: number;
-  end_date: Date;
-  save_label: string;
-  date_created: Date;
+interface RootObject {
+  current_page: number;
+  data: Datum[];
+  first_page_url: string;
+  from: number;
+  next_page_url?: any;
+  path: string;
+  per_page: number;
+  prev_page_url?: any;
+  to: number;
 }
 
 interface Datum {
@@ -115,71 +107,40 @@ interface Datum {
   amount: string;
   oldbal: string;
   newbal: string;
-  debit_source: string;
+  transaction_source: string;
   narration: string;
   status: string;
-  created_at: Date;
-  updated_at: Date;
-  savings_id: number;
-  tid: string;
-  debit_amount: string;
-  target_savings: Target_Savings;
+  created_at: string;
+  updated_at: string;
+  users_id?: number;
+  owner_tid: string;
+  transaction_type: string;
+  kolosavingsmodel?: Kolosavingsmodel;
 }
 
-interface RootObj {
-  current_page: number;
-  first_page_url: null | string;
-  from: number;
-  next_page_url: null | string;
-  path: null | string;
-  per_page: number;
-  prev_page_url: null;
-  to: null | string;
-  data: Datum[];
+interface Kolosavingsmodel {
+  id: number;
+  fullname: string;
+  email: string;
+  phone: string;
+  address: string;
+  date_created: string;
 }
-
-import { useMyAuthDataStore } from "../../../stores/authData";
-
-// const { $fetchToken, $getToken } = useNuxtApp();
 
 const $router = useRouter();
 const goBack = () => $router.back();
+
+const dataStore = useMyAuthDataStore();
 
 const userToken = ref<string | null>(dataStore.token);
 const transactions = ref<Datum[]>([]);
 const currentPage = ref(1);
 
-// watchEffect(async () => {
-//   try {
-//     const data = axiosinstance.get("savings/view-target-transactions", {
-//       headers: {
-//         Authorization: "Bearer " + userToken.value,
-//       },
-//       params: {
-//         is_single_record: false,
-//         longitude: "2039382",
-//         latitude: "08090932",
-//       },
-//     });
-//     console.log(userToken.value);
-//     console.log(await data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
 const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
 
-// watchEffect(() => {
-//   if (process.browser) {
-//     $fetchToken();
-//     userToken.value = $getToken();
-//   }
-// });
-
-const { data, pending, error } = useFetch<RootObj>(
+const { data, pending, error } = useFetch<RootObject>(
   "https://kams.kolomoni.ng/api/savings/view-kolo-savings-transactions",
   {
     method: "get",
@@ -198,9 +159,18 @@ const { data, pending, error } = useFetch<RootObj>(
   }
 );
 
+function removeDuplicates(data: any) {
+  let jsonObject = data.map(JSON.stringify);
+  let uniqueSet = new Set(jsonObject);
+  //@ts-ignore
+  let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+
+  return uniqueArray;
+}
+
 watchEffect(() => {
   if (data.value) {
-    transactions.value.splice(0, 0, ...data.value?.data);
+    transactions.value = removeDuplicates(data.value?.data);
   }
   console.log(transactions.value);
 });

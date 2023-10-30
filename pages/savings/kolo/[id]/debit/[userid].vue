@@ -61,7 +61,7 @@ const { userid } = params;
 const koloSavings = reactive({
   amount: "",
   transfer_type: "debit",
-  debit: true,
+  debit: "true",
 });
 
 const koloSavingsError = reactive({
@@ -119,6 +119,7 @@ const savePlan = async () => {
       if (data.message) {
         toast.error(data.message);
       }
+      //@ts-ignore
       toast.error(data.error);
     }
   } catch (error) {

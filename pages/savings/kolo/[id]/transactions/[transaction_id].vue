@@ -111,30 +111,6 @@ watchEffect(() => {
   }
 });
 
-watchEffect(() => {
-  console.log(transaction_id);
-});
-
-// watchEffect(async () => {
-//   try {
-//     const data = axiosinstance.get("savings/view-target-savings", {
-//       headers: {
-//         Authorization: "Bearer " + userToken.value,
-//       },
-//       params: {
-//         is_single_record: true,
-//         longitude: "2039382",
-//         latitude: "08090932",
-//          single_record_id:id
-//       },
-//     });
-//     console.log(userToken.value);
-//     console.log(await data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
 interface Target_Savings {
   id: number;
   end_date: Date;
@@ -181,7 +157,7 @@ const { data, pending, error } = useFetch<RootObj>(
       Authorization: "Bearer " + userToken.value,
     },
     params: {
-      is_single_record: true,
+      is_single_record: "true",
       longitude: "2039382",
       latitude: "08090932",
       single_record_id: transaction_id,

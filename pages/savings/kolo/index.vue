@@ -46,7 +46,14 @@
             <p>Agent Balance: </p>
             &nbsp;
             <p class="font-bold">
-              {{ formatToCurrency(balanceData?.amount, true, true, "NGN") }}
+              {{
+                formatToCurrency(
+                  parseInt(balanceData?.amount || "0"),
+                  true,
+                  true,
+                  "NGN"
+                )
+              }}
             </p>
           </div>
 
@@ -59,22 +66,16 @@
               "
               :key="savingsData.id"
             >
-              <div class="grid grid-cols-2 gap-2">
-                <div class="flex flex-col col-span-2 text-lg">
-                  <h4 class="font-bold capitalize"
-                    >{{ savingsData.save_label }}
-                  </h4>
-                </div>
-
-                <div class="flex flex-col">
-                  <p> Name </p>
+              <div class="grid grid-cols-1 gap-2">
+                <div class="flex flex-row gap-1">
+                  <p> Name: </p>
                   <h4 class="text-base font-medium">
                     {{ savingsData?.fullname }}
                   </h4>
                 </div>
 
-                <div class="flex flex-col">
-                  <p>Email </p>
+                <div class="flex flex-row gap-1">
+                  <p>Email: </p>
                   <h4 class="text-base font-medium truncate">
                     {{ savingsData?.email }}
                   </h4>
@@ -97,28 +98,35 @@
 </template>
 
 <script setup lang="ts">
-interface Datum {
-  id: string;
-  tid: string;
-  amount_deduction: string;
-  status: string;
-  save_label: String;
-  dedution_type: string;
-  updated_at: Date;
-  created_at: Date;
-  selected_transactions: string[];
+interface RootObject {
+  current_page: number;
+  data: Datum[];
+  first_page_url: string;
+  from: number;
+  next_page_url?: any;
+  path: string;
+  per_page: number;
+  prev_page_url?: any;
+  to: number;
 }
 
-interface RootObj {
-  current_page: number;
-  first_page_url: null | string;
-  from: number;
-  next_page_url: null | string;
-  path: null | string;
-  per_page: number;
-  prev_page_url: null;
-  to: null | string;
-  data: Datum[];
+interface Datum {
+  id: number;
+  owner_tid: string;
+  fullname: string;
+  email: string;
+  phone: string;
+  address: string;
+  created_at: string;
+  updated_at: string;
+  status: string;
+  wallet: Wallet;
+}
+
+interface Wallet {
+  current_balance: string;
+  wallet_id: number;
+  user_id: number;
 }
 
 import { useMyAuthDataStore } from "../../../stores/authData";
@@ -137,7 +145,7 @@ const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
 
-const { data, pending, error } = useFetch<RootObj>(
+const { data, pending, error } = useFetch<RootObject>(
   "https://kams.kolomoni.ng/api/savings/view-kolo-savings",
   {
     method: "get",
@@ -156,11 +164,38 @@ const { data, pending, error } = useFetch<RootObj>(
   }
 );
 
+interface BalanceRootObject {
+  id: number;
+  tid: string;
+  email: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  amount: string;
+  usersajorsavings: Usersajorsaving[];
+}
+
+interface Usersajorsaving {
+  id: number;
+  owner_tid: string;
+  fullname: string;
+  email: string;
+  phone: string;
+  address: string;
+  wallet: Wallet;
+}
+
+interface Wallet {
+  current_balance: string;
+  wallet_id: number;
+  user_id: number;
+}
+
 const {
   data: balanceData,
   pending: balanceDataPending,
   error: balanceDataError,
-} = useFetch<RootObj>(
+} = useFetch<BalanceRootObject>(
   "https://kams.kolomoni.ng/api/savings/view-koloajo-balance",
   {
     method: "get",
@@ -177,8 +212,6 @@ const {
     watch: [currentPage],
   }
 );
-
-console.log(balanceData);
 
 function removeDuplicates(data: any) {
   let jsonObject = data.map(JSON.stringify);

@@ -60,8 +60,8 @@ const { userid } = params;
 
 const koloSavings = reactive({
   amount: "",
-  transfer_type: "debit",
-  credit: true,
+  transfer_type: "credit",
+  credit: "true",
 });
 
 const koloSavingsError = reactive({

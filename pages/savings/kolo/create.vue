@@ -102,6 +102,7 @@ const koloSavings = reactive({
   fullname: "",
   email: "",
   address: "",
+  phone: "",
   creditamount: "",
   debitsource: {
     label: "Wallet",
@@ -155,7 +156,6 @@ const savePlan = async () => {
     return;
   }
   loading.value = true;
-  console.log("data is processing");
 
   try {
     const { data } = await axiosinstance.post<{
@@ -175,11 +175,9 @@ const savePlan = async () => {
       }
     );
 
-    console.log(data);
-
     if (data.success) {
       toast.success(data.message);
-      await navigateTo("/savings/fixed");
+      await navigateTo("/savings/kolo");
     } else {
       toast.error(data.message);
     }
