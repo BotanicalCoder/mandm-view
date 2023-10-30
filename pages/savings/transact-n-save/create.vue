@@ -44,6 +44,7 @@
 
         <input-text
           label="Save Amount"
+          type="number"
           :placeholder="
             transactNSave.deductiontype.value == 'fixed' ? '1000' : '100%'
           "

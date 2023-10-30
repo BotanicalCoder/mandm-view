@@ -90,7 +90,13 @@
           </div> -->
 
           <div class="flex flex-col items-start">
-            <p class="text-sm"> Amount</p>
+            <p class="text-sm">
+              {{
+                data?.data[0]?.dedution_type == "fixed"
+                  ? "Amount"
+                  : "Percentage"
+              }}</p
+            >
             <h4 class="font-medium text-base capitalize">
               {{
                 data?.data[0]?.dedution_type == "fixed"
@@ -157,43 +163,39 @@ const userToken = ref<string | null>(dataStore.token);
 // @ts-ignore
 const { id } = params;
 
+interface RootObject {
+  current_page: number;
+  data: Datum[];
+  first_page_url: string;
+  from: number;
+  next_page_url?: any;
+  path: string;
+  per_page: number;
+  prev_page_url?: any;
+  to: number;
+}
+
+interface Datum {
+  tid: string;
+  amount_deduction: string;
+  save_label: string;
+  selected_transactions: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  dedution_type: string;
+  id: number;
+  interest_sum_amount_paid?: any;
+  wallet: Wallet[];
+}
+
 interface Wallet {
   current_balance: string;
   wallet_id: number;
   savings_id: number;
 }
 
-interface Datum {
-  id: string;
-  tid: string;
-  unlock_date: Date;
-  save_label: string;
-  save_target: string;
-  status: string;
-  created_at: Date;
-  updated_at: Date;
-  debit_source: string;
-  amount_debit: string;
-  when_debit: string;
-  debit_account_number: null | number;
-  interest_sum_amount_paid: number;
-  debit_day_time: string;
-  wallet: Wallet;
-}
-
-interface RootObj {
-  current_page: number;
-  first_page_url: null | string;
-  from: number;
-  next_page_url: null | string;
-  path: null | string;
-  per_page: number;
-  prev_page_url: null;
-  to: null | string;
-  data: Datum[];
-}
-
-const { data, pending, error } = useFetch<RootObj>(
+const { data, pending, error } = useFetch<RootObject>(
   "https://kams.kolomoni.ng/api/savings/view-transact-and-save",
   {
     method: "get",

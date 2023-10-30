@@ -68,7 +68,6 @@
             >
               <div class="grid grid-cols-2 gap-2">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <!-- <p> Name </p> -->
                   <h4 class="font-bold capitalize"
                     >{{ savingsData.save_label }}
                   </h4>
@@ -76,18 +75,30 @@
 
                 <div class="flex flex-col">
                   <p> Type </p>
-                  <h4 class="text-base font-medium">
-                    {{
-                      savingsData?.dedution_type?.charAt(0).toUpperCase() +
-                      savingsData?.dedution_type?.slice(1)
-                    }}
+                  <h4 class="text-base font-medium capitalize">
+                    {{ savingsData?.dedution_type }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p>Amount </p>
+                  <p>
+                    {{
+                      savingsData.dedution_type == "fixed"
+                        ? "Amount"
+                        : "Pencentage"
+                    }}
+                  </p>
                   <h4 class="text-base font-medium">
-                    {{ savingsData.amount_deduction }}
+                    {{
+                      savingsData.dedution_type == "fixed"
+                        ? formatToCurrency(
+                            Number(savingsData.amount_deduction),
+                            true,
+                            true,
+                            "NGN"
+                          )
+                        : savingsData.amount_deduction + "%"
+                    }}
                   </h4>
                 </div>
               </div>
