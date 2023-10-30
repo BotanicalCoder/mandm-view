@@ -3,7 +3,7 @@
     <div
       :class="[
         completionPercent
-          ? `bg-green-700 h-full rounded-xl w-[${completionPercent}%]`
+          ? `bg-green-700 h-full rounded-xl !w-[${completionPercent + ''}%]`
           : `bg-green-700 h-full rounded-xl w-[1%]`,
       ]"
     ></div>
