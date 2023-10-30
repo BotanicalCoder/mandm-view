@@ -45,7 +45,7 @@
           <div class="flex flex-col gap-3 mt-4">
             <div
               class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
-              v-for="(savingsData, index) in targetSavings"
+              v-for="(savingsData, index) in fixedSavings"
               @click="
                 async () => await navigateTo('/savings/fixed/' + savingsData.id)
               "
@@ -103,7 +103,7 @@
 
 <script setup lang="ts">
 import { useMyAuthDataStore } from "../../../stores/authData";
-import moment from "moment";
+// import moment from "moment";
 
 const dataStore = useMyAuthDataStore();
 
@@ -146,7 +146,7 @@ interface RootObj {
 
 const userToken = ref<string | null>(dataStore.token);
 
-const targetSavings = ref<Datum[]>([]);
+const fixedSavings = ref<Datum[]>([]);
 const currentPage = ref(1);
 
 const $router = useRouter();
@@ -186,7 +186,7 @@ function removeDuplicates(data: any) {
 
 watchEffect(() => {
   if (data.value) {
-    targetSavings.value = removeDuplicates(data.value?.data);
+    fixedSavings.value = removeDuplicates(data.value?.data);
   }
 });
 </script>

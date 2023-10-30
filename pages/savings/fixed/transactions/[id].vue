@@ -21,7 +21,7 @@
         <div
           class="w-full text-white text-center h-content bg-[#3861b4] rounded-lg p-1"
         >
-          <h3 class="font-bold text-sm gap-2 p-2 my-auto capitalize">
+          <h3 class="font-bold text-lg gap-2 p-2 my-auto capitalize">
             {{ data?.data[0]?.narration || "--" }}
           </h3>
 

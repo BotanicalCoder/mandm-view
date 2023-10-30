@@ -38,7 +38,7 @@
         <div class="flex flex-col gap-1">
           <div class="flex justify-between">
             <div class="flex flex-col items-start">
-              <p class="text-xs"> Current Balance </p>
+              <p class="text-xs"> Start Date </p>
               <h4 class="font-medium text-sm">
                 {{
                   formatToCurrency(
@@ -53,7 +53,7 @@
             </div>
 
             <div class="flex flex-col items-start">
-              <p class="text-xs"> Target </p>
+              <p class="text-xs"> End Date </p>
               <h4 class="font-medium text-sm">
                 {{
                   formatToCurrency(
