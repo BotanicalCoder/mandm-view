@@ -42,7 +42,7 @@
             </button>
           </div>
 
-          <div class="flex flex-col gap-3 mt-4">
+          <div class="flex flex-col gap-3 mt-4" v-if="fixedSavings.length > 0">
             <div
               class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
               v-for="(savingsData, index) in fixedSavings"
@@ -95,6 +95,15 @@
               {{ pending ? "Loading......" : "Load more" }}
             </button>
           </div>
+
+          <div
+            class="h-full my-12 flex justify-center items-center"
+            v-if="fixedSavings.length == 0"
+          >
+            <h3 class="font-medium font-3xl text-gray-700">
+              No Fixed Savings
+            </h3>
+          </div>
         </div>
       </div>
     </NuxtLayout>
@@ -103,7 +112,6 @@
 
 <script setup lang="ts">
 import { useMyAuthDataStore } from "../../../stores/authData";
-// import moment from "moment";
 
 const dataStore = useMyAuthDataStore();
 
@@ -180,7 +188,6 @@ function removeDuplicates(data: any) {
   let uniqueSet = new Set(jsonObject);
   //@ts-ignore
   let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
-
   return uniqueArray;
 }
 
