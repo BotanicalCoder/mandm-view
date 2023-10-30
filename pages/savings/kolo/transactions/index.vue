@@ -38,8 +38,12 @@
             >
               <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <h4 class="font-bold capitalize"
-                    >{{ transactionsData.narration }}
+                  <h4 class="font-bold capitalize">
+                    {{
+                      transactionsData.users_id
+                        ? transactionsData.narration + " - (User Copy)"
+                        : transactionsData.narration
+                    }}
                   </h4>
                 </div>
 

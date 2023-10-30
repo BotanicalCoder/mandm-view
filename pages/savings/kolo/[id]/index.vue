@@ -33,7 +33,7 @@
                 )
             "
           >
-            <Icon name="entypo:credit" size="20" color="white" /> Debit
+            <Icon name="mdi:naira" size="20" color="white" /> Debit
           </button>
           <button
             class="bg-[#3861b4] p-2 rounded-md font-medium text-white flex items-center"
@@ -44,7 +44,7 @@
                 )
             "
           >
-            <Icon name="entypo:credit" size="20" color="white" /> Credit
+            <Icon name="mdi:naira" size="20" color="white" /> Credit
           </button>
         </div>
 

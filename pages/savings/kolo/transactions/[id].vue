@@ -27,6 +27,33 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4 mt-4">
+          <div
+            class="flex flex-col col-span-2 items-start"
+            v-if="data?.data[0]?.users_id"
+          >
+            <p class="text-sm">Full name</p>
+            <h4 class="font-medium text-[1.2rem] capitalize">
+              {{ data?.data[0]?.kolosavingsmodel?.fullname }}
+            </h4>
+          </div>
+
+          <div
+            class="flex flex-col col-span-2 items-start"
+            v-if="data?.data[0]?.users_id"
+          >
+            <p class="text-sm">Email</p>
+            <h4 class="font-medium text-[1.2rem] capitalize">
+              {{ data?.data[0]?.kolosavingsmodel?.email }}
+            </h4>
+          </div>
+
+          <div class="flex flex-col items-start" v-if="data?.data[0]?.users_id">
+            <p class="text-sm">Phone no.</p>
+            <h4 class="font-medium text-[1.2rem] capitalize">
+              {{ data?.data[0]?.kolosavingsmodel?.phone }}
+            </h4>
+          </div>
+
           <div class="flex flex-col items-start">
             <p class="text-sm"> Amount </p>
             <h4 class="font-medium text-[1.2rem]">
