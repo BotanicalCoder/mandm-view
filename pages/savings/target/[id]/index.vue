@@ -91,8 +91,8 @@
             </div>
           </div>
           <progress-bar
-            :goal="parseInt(data?.data[0].save_target as string) || 0"
-            :current=" parseInt(data?.data[0].wallet?.current_balance as string) ||0"
+            :goal="parseInt(data?.data[0].save_target || '0')"
+            :current="parseInt(data?.data[0].wallet?.current_balance || '0')"
           />
         </div>
 
