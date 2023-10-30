@@ -57,7 +57,7 @@
             </p>
           </div>
 
-          <div class="flex flex-col gap-3 mt-4">
+          <div class="flex flex-col gap-3 mt-4" v-if="koloSavings.length > 0">
             <div
               class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
               v-for="(savingsData, index) in koloSavings"
@@ -90,6 +90,15 @@
             >
               {{ pending ? "Loading......" : "Load more" }}
             </button>
+          </div>
+
+          <div
+            class="h-full my-[6rem] flex justify-center items-center"
+            v-if="koloSavings.length == 0"
+          >
+            <h3 class="font-medium font-3xl text-gray-700">
+              No Fixed Savings
+            </h3>
           </div>
         </div>
       </div>
