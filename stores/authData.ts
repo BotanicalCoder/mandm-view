@@ -22,7 +22,13 @@ export const useMyAuthDataStore = defineStore({
   }),
   actions: {
     setDataState(state: State) {
-      this.$state = state;
+      // console.log(state);
+
+      let newState = { ...state, token: atob(state.token) };
+
+      console.log(newState);
+
+      this.$state = newState;
     },
   },
 });

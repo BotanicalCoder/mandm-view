@@ -34,9 +34,9 @@ import { useMyAuthDataStore } from "../stores/authData.ts";
 const route = useRoute();
 const dataStore = useMyAuthDataStore();
 
-watchEffect(() => {
-  if (route.query.data) {
-    dataStore.setDataState(JSON.parse(route.query.data));
-  }
-});
+// watchEffect(() => {
+//   if (route.query.data) {
+//     dataStore.setDataState(JSON.parse(route.query.data));
+//   }
+// });
 </script>

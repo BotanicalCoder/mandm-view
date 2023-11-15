@@ -22,6 +22,8 @@
           <span> Saving Plans</span>
         </h3>
 
+        <!-- <auth /> -->
+
         <div
           v-if="error"
           class="w-full h-screen flex items-center justify-center"
@@ -70,6 +72,7 @@
 
 <script setup lang="ts">
 // const { $fetchToken, $getToken } = useNuxtApp();
+import AuthClient from "~/components/auth.client.vue";
 import { useMyAuthDataStore } from "../../stores/authData";
 
 const dataStore = useMyAuthDataStore();
@@ -78,6 +81,15 @@ const $router = useRouter();
 const goBack = () => $router.back();
 
 const userToken = ref<string | null>(dataStore.token);
+
+watchEffect(() => {
+  // if (window.Android && window.Android.getVariable) {
+  //   let androidVariable = window.Android.getVariable();
+  //   console.log(androidVariable);
+  // } else {
+  //   console.error("Android interface or method not available.");
+  // }
+});
 
 interface SavingsObject {
   id: number;
