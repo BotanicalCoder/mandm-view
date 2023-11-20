@@ -21,40 +21,19 @@
         <div
           class="flex flex-row h-full p-4 items-center justify-center gap-4 flex-wrap"
         >
-          <card
-            text="Instagram"
-            link="https://instagram.com/kolomoniagent"
-            :is-external="true"
-          >
-            <Icon
-              name="skill-icons:instagram"
-              size="60"
-              color="#003399"
-              :is-external="true"
-            />
+          <card text="@kolomoniagent" link="">
+            <Icon name="skill-icons:instagram" size="60" color="#003399" />
           </card>
 
-          <card
-            text="Twitter / X"
-            link="https://twitter.com/kolomoniagent"
-            :is-external="true"
-          >
+          <card text="@kolomoniagent" link="#">
             <Icon name="skill-icons:twitter" size="60" color="#003399" />
           </card>
 
-          <card
-            text="WhatsApp"
-            link=" https://wa.me/9132623643"
-            :is-external="true"
-          >
+          <card text="09132623643" link="#">
             <Icon name="logos:whatsapp-icon" size="60" color="#003399" />
           </card>
 
-          <card
-            text="Facebook"
-            link="https://www.facebook.com/Kolomoni.ng"
-            :is-external="true"
-          >
+          <card text="Kolomoni.ng" link="#">
             <Icon name="logos:facebook" size="60" color="#003399" />
           </card>
         </div>
