@@ -34,11 +34,11 @@
           Call us on:
           <br />
           <p class="flex flex-wrap gap-4" >
-            <span class="font-bold">09087792935 </span>
+            <span class="font-bold">09087792935 &nbsp; </span>
 
-            <span class="font-bold">08104386082 </span>
+            <span class="font-bold">08104386082 &nbsp; </span>
 
-            <span class="font-bold">07068364670 </span>
+            <span class="font-bold">07068364670 &nbsp; </span>
 
             <span class="font-bold">07061928550  </span>
 
