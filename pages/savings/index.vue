@@ -22,8 +22,6 @@
           <span> Saving Plans</span>
         </h3>
 
-        <!-- <auth /> -->
-
         <div
           v-if="error"
           class="w-full h-screen flex items-center justify-center"
@@ -57,7 +55,10 @@
                       >Save a part of your earnings</p
                     > -->
                   </div>
-                  <p class="font-medium text-sm text-black">
+                  <p
+                    class="font-medium text-sm text-black"
+                    v-if="plan.interest_rate"
+                  >
                     {{ plan.interest_rate }}% Interest
                   </p>
                 </div>
@@ -81,15 +82,6 @@ const $router = useRouter();
 const goBack = () => $router.back();
 
 const userToken = ref<string | null>(dataStore.token);
-
-watchEffect(() => {
-  // if (window.Android && window.Android.getVariable) {
-  //   let androidVariable = window.Android.getVariable();
-  //   console.log(androidVariable);
-  // } else {
-  //   console.error("Android interface or method not available.");
-  // }
-});
 
 interface SavingsObject {
   id: number;

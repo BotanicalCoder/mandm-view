@@ -20,10 +20,7 @@ export default defineNuxtConfig({
       TEST_PUBLIC_KEY: process.env.NUXT_TEST_PUBLIC_KEY,
     },
   },
-  plugins: [
-    "~/plugins/vue3-toastify.client.ts",
-    "~/plugins/js-encrypt.client.js",
-  ],
+  plugins: ["~/plugins/vue3-toastify.client.ts"],
   build: {
     transpile: ["@vuepic/vue-datepicker"],
   },

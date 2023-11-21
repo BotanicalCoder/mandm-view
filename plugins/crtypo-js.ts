@@ -20,8 +20,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       },
 
       decryptKey: (data: string) => {
-        // console.log(data);
-
         var rawData = CryptoJS.enc.Base64.parse(data);
         var key = CryptoJS.enc.Base64.parse(
           "ZG1zNFdGVVF1VEduZj83M3Q3WnEqP31dISx3UXtpYGg="
@@ -33,8 +31,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         });
 
         var plaintext = plaintextData.toString(CryptoJS.enc.Latin1);
-
-        console.log(plaintext);
 
         return plaintext;
       },
