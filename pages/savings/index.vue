@@ -91,12 +91,14 @@ const dataStore = useMyAuthDataStore();
 const $router = useRouter();
 
 watchEffect(() => {
-  dataStore.setDataState(
-    JSON.parse(
-      // $decryptKey(route.query.data.replace(/-/g, "+").replace(/_/g, "/"))
-      route?.query?.data
-    )
-  );
+  if (route?.query?.data) {
+    dataStore.setDataState(
+      JSON.parse(
+        $decryptKey(route.query.data?.replace(/-/g, "+").replace(/_/g, "/"))
+        // route?.query?.data
+      )
+    );
+  }
 });
 
 const goBack = () => $router.back();
