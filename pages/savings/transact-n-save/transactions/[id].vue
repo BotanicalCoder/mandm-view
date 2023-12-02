@@ -21,9 +21,9 @@
           <h4 class="text-base font-medium">
             {{
               formatToCurrency(
-                parseInt(data?.data[0]?.debit_amount as string) || 0,
-                true,
-                true,
+                parseFloat(data?.data[0]?.debit_amount as string) || 0,
+                false,
+                false,
                 "NGN"
               )
             }}
@@ -49,7 +49,7 @@
           <div class="flex flex-col items-center">
             <p class="text-sm"> Debit Source</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ moment(data?.data[0]?.debit_source) }}
+              {{ data?.data[0]?.debit_source }}
             </h4>
           </div>
 
@@ -58,9 +58,9 @@
             <h4 class="font-medium text-[1.3rem]">
               {{
                 formatToCurrency(
-                  parseInt(data?.data[0]?.amount as string) || 0,
-                  true,
-                  true,
+                  parseFloat(data?.data[0]?.amount as string) || 0,
+                  false,
+                  false,
                   "NGN"
                 )
               }}
@@ -70,7 +70,7 @@
           <div class="flex flex-col items-center">
             <p class="text-sm"> Debit Source</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ moment(data?.data[0]?.debit_source) }}
+              {{ data?.data[0]?.debit_source }}
             </h4>
           </div>
 
@@ -91,7 +91,11 @@
           <div class="flex flex-col items-center">
             <p class="text-sm"> Date</p>
             <h4 class="font-medium text-[1.1rem] capitalize">
-              {{ moment(data?.data[0]?.created_at).format("DD, MMM, YYYY") }}
+              {{
+                data?.data[0]?.created_at
+                  ? moment(data?.data[0]?.created_at).format("DD, MMMM, YYYY")
+                  : "-"
+              }}
             </h4>
           </div>
 
@@ -121,19 +125,12 @@
 import moment from "moment";
 const params = useRoute().params;
 
-const { $fetchToken, $getToken } = useNuxtApp();
+const dataStore = useMyAuthDataStore();
 
-const userToken = ref<string | null>(null);
+const userToken = ref<string | null>(dataStore.token);
 
 // @ts-ignore
 const { id } = params;
-
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
-    userToken.value = $getToken();
-  }
-});
 
 // watchEffect(async () => {
 //   try {

@@ -48,9 +48,9 @@
             <p class="font-bold">
               {{
                 formatToCurrency(
-                  parseInt(balanceData?.amount || "0"),
-                  true,
-                  true,
+                  parseFloat(balanceData?.amount || "0"),
+                  false,
+                  false,
                   "NGN"
                 )
               }}

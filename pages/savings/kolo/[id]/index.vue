@@ -55,8 +55,8 @@
               {{
                 formatToCurrency(
                   +data?.data[0]?.wallet?.current_balance || 0,
-                  true,
-                  true,
+                  false,
+                  false,
                   "NGN"
                 )
               }}
@@ -83,8 +83,8 @@
               {{
                 formatToCurrency(
                   +data?.data[0]?.wallet.current_balance || 0,
-                  true,
-                  true,
+                  false,
+                  false,
                   "NGN"
                 )
               }}

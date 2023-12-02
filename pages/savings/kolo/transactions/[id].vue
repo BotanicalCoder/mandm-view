@@ -59,9 +59,9 @@
             <h4 class="font-medium text-[1.2rem]">
               {{
                 formatToCurrency(
-                  parseInt(data?.data[0]?.amount as string) || 0,
-                  true,
-                  true,
+                  parseFloat(data?.data[0]?.amount as string) || 0,
+                  false,
+                  false,
                   "NGN"
                 )
               }}
@@ -78,7 +78,11 @@
           <div class="flex flex-col items-start">
             <p class="text-sm"> Date </p>
             <h4 class="font-medium text-[1.2rem]">
-              {{ moment(data?.data[0]?.created_at).format("DD, MMM, YYYY") }}
+              {{
+                data?.data[0]?.created_at
+                  ? moment(data?.data[0]?.created_at).format("DD, MMMM, YYYY")
+                  : "-"
+              }}
             </h4>
           </div>
 

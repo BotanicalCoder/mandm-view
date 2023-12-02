@@ -26,8 +26,8 @@
             {{
               formatToCurrency(
                 data?.data[0].interest_sum_amount_paid || 0,
-                true,
-                true,
+                false,
+                false,
                 "NGN"
               )
             }}
@@ -40,35 +40,20 @@
             <div class="flex flex-col items-start">
               <p class="text-xs"> Start Date </p>
               <h4 class="font-medium text-sm">
-                {{
-                  formatToCurrency(
-                    parseInt(data?.data[0].wallet?.current_balance as string) ||
-                      0,
-                    true,
-                    true,
-                    "NGN"
-                  )
-                }}
+                {{ moment(data?.data[0].created_at).format("DD-MM-YYYY") }}
               </h4>
             </div>
 
             <div class="flex flex-col items-start">
               <p class="text-xs"> End Date </p>
               <h4 class="font-medium text-sm">
-                {{
-                  formatToCurrency(
-                    parseInt(data?.data[0].save_target as string) || 0,
-                    true,
-                    true,
-                    "NGN"
-                  )
-                }}
+                {{ "-" }}
               </h4>
             </div>
           </div>
           <progress-bar
-            :goal="parseInt(data?.data[0].save_target as string) || 0"
-            :current=" parseInt(data?.data[0].wallet?.current_balance as string) ||0"
+            :goal="moment(data?.data[0].created_at).unix() || 0"
+            :current="0"
           />
         </div>
 

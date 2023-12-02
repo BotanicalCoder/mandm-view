@@ -79,8 +79,8 @@
                       savingsData.dedution_type == "fixed"
                         ? formatToCurrency(
                             Number(savingsData.amount_deduction),
-                            true,
-                            true,
+                            false,
+                            false,
                             "NGN"
                           )
                         : savingsData.amount_deduction + "%"

@@ -63,8 +63,8 @@
                     {{
                       formatToCurrency(
                         +savingsData.amount || 0,
-                        true,
-                        true,
+                        false,
+                        false,
                         "NGN"
                       )
                     }}
@@ -77,8 +77,8 @@
                     {{
                       formatToCurrency(
                         +savingsData.interest_sum_amount_paid || 0,
-                        true,
-                        true,
+                        false,
+                        false,
                         "NGN"
                       )
                     }}
@@ -184,6 +184,7 @@ const { data, pending, error } = useFetch<RootObj>(
 );
 
 function removeDuplicates(data: any) {
+  console.log(data);
   let jsonObject = data.map(JSON.stringify);
   let uniqueSet = new Set(jsonObject);
   //@ts-ignore

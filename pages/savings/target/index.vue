@@ -70,7 +70,11 @@
                   <p> Due Date </p>
                   <h4 class="text-base font-medium">
                     {{
-                      moment(savingsData.unlock_date).format("DD, MMM, YYYY")
+                      savingsData.unlock_date
+                        ? moment(savingsData.unlock_date).format(
+                            "DD, MMMM, YYYY"
+                          )
+                        : "-"
                     }}
                   </h4>
                 </div>
@@ -183,6 +187,8 @@ function removeDuplicates(data: any) {
 }
 
 watchEffect(() => {
+  console.log(data.value);
+
   if (data.value) {
     targetSavings.value = removeDuplicates(data.value?.data);
   }

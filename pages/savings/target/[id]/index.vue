@@ -28,8 +28,8 @@
             {{
               formatToCurrency(
                 data?.data[0].interest_sum_amount_paid || 0,
-                true,
-                true,
+                false,
+                false,
                 "NGN"
               )
             }}
@@ -66,10 +66,11 @@
               <h4 class="font-medium text-sm">
                 {{
                   formatToCurrency(
-                    parseInt(data?.data[0].wallet?.current_balance as string) ||
-                      0,
-                    true,
-                    true,
+                    parseFloat(
+                      data?.data[0].wallet?.current_balance as string
+                    ) || 0,
+                    false,
+                    false,
                     "NGN"
                   )
                 }}
@@ -81,9 +82,9 @@
               <h4 class="font-medium text-sm">
                 {{
                   formatToCurrency(
-                    parseInt(data?.data[0].save_target as string) || 0,
-                    true,
-                    true,
+                    parseFloat(data?.data[0].save_target as string) || 0,
+                    false,
+                    false,
                     "NGN"
                   )
                 }}
@@ -91,8 +92,8 @@
             </div>
           </div>
           <progress-bar
-            :goal="parseInt(data?.data[0].save_target || '0')"
-            :current="parseInt(data?.data[0].wallet?.current_balance || '0')"
+            :goal="parseFloat(data?.data[0].save_target || '0')"
+            :current="parseFloat(data?.data[0].wallet?.current_balance || '0')"
           />
         </div>
 
@@ -102,10 +103,10 @@
             <h4 class="font-medium text-base">
               {{
                 formatToCurrency(
-                  parseInt(data?.data[0].wallet?.current_balance as string) ||
+                  parseFloat(data?.data[0].wallet?.current_balance as string) ||
                     0,
-                  true,
-                  true,
+                  false,
+                        false,
                   "NGN"
                 )
               }}
@@ -117,9 +118,9 @@
             <h4 class="font-medium text-base">
               {{
                 formatToCurrency(
-                  parseInt(data?.data[0].save_target as string) || 0,
-                  true,
-                  true,
+                  parseFloat(data?.data[0].save_target as string) || 0,
+                   false,
+                        false,
                   "NGN"
                 )
               }}
@@ -129,15 +130,22 @@
           <div class="flex flex-col items-start">
             <p class="text-sm"> Start Date</p>
             <h4 class="font-medium text-base capitalize">
-              <!-- {{ data?.data[0].status }} -->
-              {{ moment(data?.data[0].created_at).format("DD, MMM, YYYY") }}
+              {{
+                data?.data[0].created_at
+                  ? moment(data?.data[0].created_at).format("DD, MMM, YYYY")
+                  : "-"
+              }}
             </h4>
           </div>
 
           <div class="flex flex-col items-start">
             <p class="text-sm"> Unlock Date</p>
             <h4 class="font-medium text-base capitalize">
-              {{ moment(data?.data[0].unlock_date).format("DD, MMM, YYYY") }}
+              {{
+                data?.data[0].unlock_date
+                  ? moment(data?.data[0].unlock_date).format("DD, MMM, YYYY")
+                  : "-"
+              }}
             </h4>
           </div>
 
@@ -146,9 +154,9 @@
             <h4 class="font-medium text-base capitalize">
               {{
                 formatToCurrency(
-                  parseInt(data?.data[0].amount_debit as string) || 0,
-                  true,
-                  true,
+                  parseFloat(data?.data[0].amount_debit as string) || 0,
+                  false,
+                  false,
                   "NGN"
                 )
               }}, {{ data?.data[0].when_debit }}
@@ -197,22 +205,15 @@
 import moment from "moment";
 const params = useRoute().params;
 
-const { $fetchToken, $getToken } = useNuxtApp();
-
 const $router = useRouter();
 const goBack = () => $router.back();
 
-const userToken = ref<string | null>(null);
+const dataStore = useMyAuthDataStore();
+
+const userToken = ref<string | null>(dataStore.token);
 
 // @ts-ignore
 const { id } = params;
-
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
-    userToken.value = $getToken();
-  }
-});
 
 // watchEffect(async () => {
 //   try {

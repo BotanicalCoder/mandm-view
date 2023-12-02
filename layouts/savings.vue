@@ -13,11 +13,7 @@
   </template>
 </template>
 <script setup>
-import { useMyAuthDataStore } from "../stores/authData.ts";
 
-const { $decryptKey, $encryptKey } = useNuxtApp();
-const route = useRoute();
-const dataStore = useMyAuthDataStore();
 
 const showSpinner = ref(true);
 
@@ -27,13 +23,5 @@ onBeforeMount(() => {
 
 onMounted(() => {
   showSpinner.value = false;
-});
-
-watchEffect(() => {
-  dataStore.setDataState(
-    JSON.parse(
-      $decryptKey(route.query.data.replace(/-/g, "+").replace(/_/g, "/"))
-    )
-  );
 });
 </script>

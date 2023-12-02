@@ -49,9 +49,11 @@
                   <p> Date </p>
                   <h4 class="text-base font-medium">
                     {{
-                      moment(transactionsData.created_at).format(
-                        "DD, MMM, YYYY"
-                      )
+                      transactionsData.created_at
+                        ? moment(transactionsData.created_at).format(
+                            "DD, MMMM, YYYY"
+                          )
+                        : "-"
                     }}
                   </h4>
                 </div>
@@ -61,9 +63,9 @@
                   <h4 class="text-base font-medium">
                     {{
                       formatToCurrency(
-                        parseInt(transactionsData.debit_amount) || 0,
-                        true,
-                        true,
+                        parseFloat(transactionsData.debit_amount) || 0,
+                        false,
+                        false,
                         "NGN"
                       )
                     }}

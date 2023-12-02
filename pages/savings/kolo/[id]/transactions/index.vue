@@ -36,9 +36,11 @@
                   <p> Date </p>
                   <h4 class="text-base font-medium">
                     {{
-                      moment(transactionsData.created_at).format(
-                        "DD, MMM, YYYY"
-                      )
+                      transactionsData.created_at
+                        ? moment(transactionsData.created_at).format(
+                            "DD, MMMM, YYYY"
+                          )
+                        : "-"
                     }}
                   </h4>
                 </div>
@@ -48,9 +50,9 @@
                   <h4 class="text-base font-medium">
                     {{
                       formatToCurrency(
-                        parseInt(transactionsData.debit_amount) || 0,
-                        true,
-                        true,
+                        parseFloat(transactionsData.debit_amount) || 0,
+                        false,
+                        false,
                         "NGN"
                       )
                     }}
@@ -71,8 +73,8 @@
                     {{
                       formatToCurrency(
                         savingsData.interest_sum_amount_paid || 0,
-                        true,
-                        true,
+                        false,
+                        false,
                         "NGN"
                       )
                     }}
@@ -138,9 +140,9 @@ interface RootObj {
   data: Datum[];
 }
 
-const { $fetchToken, $getToken } = useNuxtApp();
+const dataStore = useMyAuthDataStore();
 
-const userToken = ref<string | null>(null);
+const userToken = ref<string | null>(dataStore.token);
 const transactions = ref<Datum[]>([]);
 const currentPage = ref(1);
 
@@ -166,13 +168,6 @@ const currentPage = ref(1);
 const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
-
-watchEffect(() => {
-  if (process.browser) {
-    $fetchToken();
-    userToken.value = $getToken();
-  }
-});
 
 const { data, pending, error } = useFetch<RootObj>(
   "https://kams.kolomoni.ng/api/savings/view-target-transactions",

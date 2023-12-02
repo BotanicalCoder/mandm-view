@@ -16,8 +16,6 @@ export const useMyAuthDataStore = defineStore({
   }),
   actions: {
     setDataState(state: State) {
-      console.log(state);
-
       let newState = {
         ...state,
       };

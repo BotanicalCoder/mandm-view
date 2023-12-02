@@ -1,66 +1,71 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div
-        class="w-full h-screen flex items-center justify-center"
-        v-if="pending"
-      >
-        <Icon name="line-md:loading-twotone-loop" size="90" />
-      </div>
-
-      <div class="flex flex-col justify-center p-4 gap-5 text-[#003399]" v-else>
-        <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
-        >
-          <Icon
-            name="material-symbols:arrow-back-ios"
-            size="20"
-            color="black"
-            class="cursor-pointer"
-            @click="goBack"
-          />
-          <span> Saving Plans</span>
-        </h3>
-
+      <div>
         <div
-          v-if="error"
           class="w-full h-screen flex items-center justify-center"
+          v-if="pending"
         >
-          <p class="text-black text-xl"> Something went wrong </p>
+          <Icon name="line-md:loading-twotone-loop" size="90" />
         </div>
 
-        <div class="px-0 flex flex-col gap-3" v-else>
-          <div class="flex flex-col gap-3 divide-y border-t">
-            <div
-              class="flex gap-3 pt-2 bg-[#ffffff] text-black p-2 rounded-lg"
-              v-for="plan in data"
-              :key="plan.id"
-              @click="async () => await navigateTo(getLinks(plan.save_type))"
-            >
-              <Icon
-                :name="getIcons(plan.save_type)"
-                size="40"
-                color="#3861b4"
-              />
+        <div
+          class="flex flex-col justify-center p-4 gap-5 text-[#003399]"
+          v-else
+        >
+          <h3
+            class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
+          >
+            <Icon
+              name="material-symbols:arrow-back-ios"
+              size="20"
+              color="black"
+              class="cursor-pointer"
+              @click="goBack"
+            />
+            <span> Saving Plans</span>
+          </h3>
 
-              <div class="flex items-center gap-2">
-                <div class="flex flex-col">
+          <div
+            v-if="error"
+            class="w-full h-screen flex items-center justify-center"
+          >
+            <p class="text-black text-xl"> Something went wrong </p>
+          </div>
+
+          <div class="px-0 flex flex-col gap-3" v-else>
+            <div class="flex flex-col gap-3 divide-y border-t">
+              <div
+                class="flex gap-3 pt-2 bg-[#ffffff] text-black p-2 rounded-lg"
+                v-for="plan in data"
+                :key="plan.id"
+                @click="async () => await navigateTo(getLinks(plan.save_type))"
+              >
+                <Icon
+                  :name="getIcons(plan.save_type)"
+                  size="40"
+                  color="#3861b4"
+                />
+
+                <div class="flex items-center gap-2">
                   <div class="flex flex-col">
-                    <h4 class="text-base font-medium capitalize"
-                      >{{ plan.saveDisplayName }}
-                    </h4>
+                    <div class="flex flex-col">
+                      <h4 class="text-base font-medium capitalize"
+                        >{{ plan.saveDisplayName }}
+                      </h4>
 
-                    <!-- plan description -->
-                    <!-- <p class="text-xs font-medium"
+                      <!-- plan description -->
+                      <!-- <p class="text-xs font-medium"
                       >Save a part of your earnings</p
                     > -->
+                    </div>
+                    <p
+                      class="font-medium text-sm text-black"
+                      v-if="plan.interest_rate"
+                    >
+                      {{ plan.interest_rate }}% Interest
+                    </p>
                   </div>
-                  <p
-                    class="font-medium text-sm text-black"
-                    v-if="plan.interest_rate"
-                  >
-                    {{ plan.interest_rate }}% Interest
-                  </p>
                 </div>
               </div>
             </div>
@@ -72,13 +77,28 @@
 </template>
 
 <script setup lang="ts">
-// const { $fetchToken, $getToken } = useNuxtApp();
-import AuthClient from "~/components/auth.client.vue";
+// import AuthClient from "~/components/auth.client.vue";
 import { useMyAuthDataStore } from "../../stores/authData";
+
+// import { useMyAuthDataStore } from "../stores/authData.ts";
+
+const { $decryptKey, $encryptKey } = useNuxtApp();
+const route = useRoute();
+// const dataStore = useMyAuthDataStore();
 
 const dataStore = useMyAuthDataStore();
 
 const $router = useRouter();
+
+watchEffect(() => {
+  dataStore.setDataState(
+    JSON.parse(
+      // $decryptKey(route.query.data.replace(/-/g, "+").replace(/_/g, "/"))
+      route?.query?.data
+    )
+  );
+});
+
 const goBack = () => $router.back();
 
 const userToken = ref<string | null>(dataStore.token);
