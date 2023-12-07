@@ -182,10 +182,10 @@ const savePlan = async () => {
 
     if (data.success) {
       toast.success(data.message);
-      await navigateTo("/savings/transact-n-save");
     } else {
       toast.error(data.message);
     }
+    await navigateTo("/savings/transact-n-save");
   } catch (error) {
     console.log(error);
     //@ts-ignore
