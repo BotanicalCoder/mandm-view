@@ -193,10 +193,10 @@ const savePlan = async () => {
 
     if (data.success) {
       toast.success(data.message);
-      await navigateTo("/savings/kolo");
     } else {
       toast.error(data.message);
     }
+    await navigateTo("/savings/kolo");
   } catch (error) {
     console.log(error);
     //@ts-ignore
