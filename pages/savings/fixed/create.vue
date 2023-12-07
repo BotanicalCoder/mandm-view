@@ -8,7 +8,7 @@
         <Icon name="line-md:loading-twotone-loop" size="90" />
       </div>
 
-      <div class="flex flex-col p-4 gap-4" v-else>
+      <form class="flex flex-col p-4 gap-4" @submit.prevent="savePlan" v-else>
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -22,11 +22,15 @@
 
           Create Plan
         </h3>
+
+        <!-- savings name -->
         <input-text
+          type="text"
           label="Savings Name"
           placeholder="Savings Name"
           v-model="fixedSavings.savingsname"
           :errorMsg="fixedSavingsError.savingsname"
+          :required="true"
         />
 
         <input-single-select
@@ -46,10 +50,12 @@
         />
 
         <input-text
+          type="number"
           label="Debit Amount"
           placeholder="1000"
           v-model="fixedSavings.debitamount"
           :errorMsg="fixedSavingsError.debitamount"
+          :required="true"
         />
 
         <input-single-select
@@ -66,7 +72,7 @@
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          @click="savePlan"
+          type="submit"
         >
           <Icon
             :name="
@@ -77,7 +83,7 @@
           />
           {{ loading ? "Saving.." : "Save Plan" }}
         </button>
-      </div>
+      </form>
     </NuxtLayout>
   </div>
 </template>
@@ -137,10 +143,16 @@ const {
 watchEffect(() => {
   console.log(plansData.value);
 
-  if (plansData?.value?.length > 0) {
-    plans.value = plansData?.value
-      .find((plan: SavingsObject) => plan?.save_type == "fixed_deposit")
-      .plans?.map((plan) => ({ label: plan.short_name, value: plan?.id }));
+  if (plansData?.value?.length) {
+    if (plansData?.value?.length > 0) {
+      // @ts-ignore
+      plans.value = plansData?.value
+        ?.find((plan: SavingsObject) => plan?.save_type == "fixed_deposit")
+        .plans?.map((plan: Plan) => ({
+          label: plan.short_name,
+          value: plan?.id,
+        }));
+    }
   }
 });
 
@@ -184,8 +196,8 @@ const validateForm = () => {
   } else if (!fixedSavings.debitamount) {
     fixedSavingsError.debitamount = "Debit Amount is required";
     return false;
-  } else if (!fixedSavings.fixedplans) {
-    fixedSavingsError.fixedplans = "Plan  is required";
+  } else if (!fixedSavings.fixedplans.value) {
+    fixedSavingsError.fixedplans = "Plan is required";
     return false;
   } else {
     return true;
@@ -222,20 +234,27 @@ const savePlan = async () => {
 
     if (data.success) {
       toast.success(data.message);
-      await navigateTo("/savings/fixed");
     } else {
       if (data.message) {
         return toast.error(data.message);
       } else {
+        // @ts-ignore
         return toast.error(data.error);
       }
     }
+
+    await navigateTo("/savings/fixed");
   } catch (error) {
     console.log(error);
-    // console.log(error?.data.error);
+    // @ts-ignore
+    console.log(error?.data.error);
+
+    // @ts-ignore
     if (error?.data.error) {
+      // @ts-ignore
       return toast.error(error?.data?.error);
     } else {
+      // @ts-ignore
       return toast.error(error?.data?.message);
     }
   } finally {
