@@ -5,10 +5,12 @@
     </label>
 
     <input
-      type="text"
+      :required="required"
       :placeholder="placeholder"
       @input="handleChange"
       :value="modelValue"
+      :pattern="pattern"
+      :type="type || 'text'"
       class="border border-1 p-2 rounded-lg focus:border-[#3861b4] focus:outline-[#3861b4]"
     />
 
@@ -19,12 +21,16 @@
 </template>
 
 <script lang="ts" setup>
-const { label, placeholder, modelValue, errorMsg } = defineProps<{
-  label: string;
-  placeholder: string;
-  modelValue: string | number;
-  errorMsg?: string;
-}>();
+const { label, placeholder, modelValue, errorMsg, pattern, required } =
+  defineProps<{
+    label: string;
+    placeholder: string;
+    modelValue: string | number;
+    required?: boolean;
+    type?: string;
+    pattern?: string;
+    errorMsg?: string;
+  }>();
 
 const emits = defineEmits(["update:modelValue"]);
 

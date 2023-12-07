@@ -1,7 +1,7 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div class="flex flex-col p-4 gap-4">
+      <form class="flex flex-col p-4 gap-4" @submit.prevent="savePlan">
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -19,6 +19,7 @@
           label="Savings Name"
           placeholder="Savings Name"
           v-model="transactNSave.savingsname"
+          pattern="[A-Za-z -]+"
           :errorMsg="transactNSaveError.savingsname"
         />
 
@@ -82,7 +83,7 @@
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          @click="savePlan"
+          type="submit"
         >
           <Icon
             :name="
@@ -93,7 +94,7 @@
           />
           {{ loading ? "Saving.." : "Save Plan" }}
         </button>
-      </div>
+      </form>
     </NuxtLayout>
   </div>
 </template>

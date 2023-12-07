@@ -1,7 +1,7 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div class="flex flex-col p-4 gap-4">
+      <form class="flex flex-col p-4 gap-4" @submit.prevent="debitUser">
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -17,15 +17,17 @@
         </h3>
 
         <input-text
+          type="number"
           label="Amount"
           placeholder="Enter amount no. "
           v-model="koloSavings.amount"
           :errorMsg="koloSavingsError.amount"
+          :required="true"
         />
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          @click="savePlan"
+          type="submit"
         >
           <Icon
             :name="
@@ -36,7 +38,7 @@
           />
           {{ loading ? "Making transfer.." : "Make transfer" }}
         </button>
-      </div>
+      </form>
     </NuxtLayout>
   </div>
 </template>
@@ -80,7 +82,7 @@ const validateForm = () => {
   }
 };
 
-const savePlan = async () => {
+const debitUser = async () => {
   const isValid = validateForm();
 
   if (!isValid) {
@@ -114,7 +116,6 @@ const savePlan = async () => {
 
     if (data.success) {
       toast.success(data.message);
-      await navigateTo("/savings/kolo");
     } else {
       if (data.message) {
         toast.error(data.message);
@@ -122,6 +123,8 @@ const savePlan = async () => {
       //@ts-ignore
       toast.error(data.error);
     }
+
+    await navigateTo("/savings/kolo");
   } catch (error) {
     console.log(error);
     //@ts-ignore

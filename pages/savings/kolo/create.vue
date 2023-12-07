@@ -1,7 +1,7 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div class="flex flex-col p-4 gap-4">
+      <form class="flex flex-col p-4 gap-4" @submit.prevent="savePlan">
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -16,34 +16,47 @@
           Create User
         </h3>
 
+        <!-- fullname -->
         <input-text
+          type="text"
           label="Full Name"
           placeholder="Full Name"
           v-model="koloSavings.fullname"
           :errorMsg="koloSavingsError.fullname"
+          :required="true"
         />
 
+        <!-- email -->
         <input-text
+          type="email"
           label="Email"
           placeholder="Email"
           v-model="koloSavings.email"
           :errorMsg="koloSavingsError.email"
+          :required="true"
         />
 
+        <!-- amount -->
         <input-text
+          type="number"
           label="Save Amount"
           placeholder="Enter Amount "
           v-model="koloSavings.creditamount"
           :errorMsg="koloSavingsError.creditamount"
+          :required="true"
         />
 
+        <!-- address -->
         <input-text
           label="Address"
           placeholder="Address"
           v-model="koloSavings.address"
+          type="text"
           :errorMsg="koloSavingsError.address"
+          :required="true"
         />
 
+        <!-- debit source -->
         <input-single-select
           class="z-10"
           :options="[
@@ -60,16 +73,20 @@
           :errorMsg="koloSavingsError.debitsource"
         />
 
+        <!-- phone number -->
         <input-text
+          type="tel"
+          pattern="^(?:(?:\+|0)?(?:234\s?)?0)([789]\d{2}|\d{3})[- ]?\d{3}[- ]?\d{3}$"
           label="Phone"
-          placeholder="Enter phone no. "
+          placeholder="Enter Phone no. e.g 2348012345678 "
           v-model="koloSavings.phone"
           :errorMsg="koloSavingsError.phone"
+          :required="true"
         />
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          @click="savePlan"
+          type="submit"
         >
           <Icon
             :name="
@@ -80,7 +97,7 @@
           />
           {{ loading ? "Saving.." : "Save User" }}
         </button>
-      </div>
+      </form>
     </NuxtLayout>
   </div>
 </template>
