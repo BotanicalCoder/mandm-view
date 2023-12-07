@@ -1,7 +1,7 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div class="flex flex-col p-4 gap-4">
+      <form class="flex flex-col p-4 gap-4" @submit.prevent="savePlan">
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
@@ -15,13 +15,18 @@
 
           Create Plan
         </h3>
+
+        <!-- savings name -->
         <input-text
+          type="text"
           label="Savings Name"
           placeholder="Savings Name"
           v-model="targetSavings.savingsname"
           :errorMsg="targetSavingsError.savingsname"
+          :required="true"
         />
 
+        <!-- debit source -->
         <input-single-select
           class="z-10"
           :options="[
@@ -38,6 +43,7 @@
           :errorMsg="targetSavingsError.debitsource"
         />
 
+        <!-- debit frequency -->
         <input-single-select
           class="z-10"
           :options="[
@@ -62,6 +68,7 @@
           :errorMsg="targetSavingsError.debitfrequency"
         />
 
+        <!-- debit time -->
         <input-timepicker
           v-if="targetSavings.debitfrequency.value == 'daily'"
           v-model="targetSavings.debitfrequencytime"
@@ -70,6 +77,7 @@
           :errorMsg="targetSavingsError.debitfrequencytime"
         />
 
+        <!-- debit date per month -->
         <input-daypicker
           v-if="targetSavings.debitfrequency.value == 'monthly'"
           v-model="targetSavings.debitfrequencydate"
@@ -78,6 +86,7 @@
           :errorMsg="targetSavingsError.debitfrequencydate"
         />
 
+        <!-- debit frequency -->
         <input-single-select
           v-if="targetSavings.debitfrequency.value == 'weekly'"
           class="z-10"
@@ -119,20 +128,26 @@
           :errorMsg="targetSavingsError.debitday"
         />
 
+        <!-- debit amount -->
         <input-text
+          type="number"
           label="Debit Amount"
           placeholder="1000"
           v-model="targetSavings.debitamount"
           :errorMsg="targetSavingsError.debitamount"
+          :required="true"
         />
 
         <input-text
+          type="number"
           label="Target Savings"
           placeholder="1000"
           v-model="targetSavings.targetsavings"
           :errorMsg="targetSavingsError.targetsavings"
+          :required="true"
         />
 
+        <!-- target savings date -->
         <input-datepicker
           v-model="targetSavings.savetargetdate"
           label="Target Date"
@@ -142,7 +157,7 @@
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          @click="savePlan"
+          type="submit"
         >
           <Icon
             :name="
@@ -153,7 +168,7 @@
           />
           {{ loading ? "Saving.." : "Save Plan" }}
         </button>
-      </div>
+      </form>
     </NuxtLayout>
   </div>
 </template>
@@ -290,13 +305,15 @@ const savePlan = async () => {
 
     if (data.success) {
       toast.success(data.message);
-      await navigateTo("/savings/target");
     } else {
       toast.error(data.message);
     }
+    await navigateTo("/savings/target");
   } catch (error) {
     console.log(error);
+    // @ts-ignore
     console.log(error?.data);
+    // @ts-ignore
     toast.error(error?.data?.message);
   } finally {
     loading.value = false;
