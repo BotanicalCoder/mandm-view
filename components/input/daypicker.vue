@@ -56,6 +56,7 @@ const handleChange = (e: any) => {
         hide-input-icon
         auto-apply
         disable-month-year-select
+        :min-date="new Date(Date.now())"
       />
 
       <!-- <component :is="CalendarIcon" class="w-5 h-5 text-gray-500" /> -->
