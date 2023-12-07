@@ -51,6 +51,7 @@
           "
           v-model="transactNSave.saveamount"
           :errorMsg="transactNSaveError.saveamount"
+          :required="true"
         />
 
         <input-multi-select

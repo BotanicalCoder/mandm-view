@@ -168,7 +168,7 @@ const loadNextPage = () => {
 };
 
 const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-target-transactions",
+  "https://kams.kolomoni.ng/api/savings/view-transact-and-save-transactions",
   {
     method: "get",
     headers: {
