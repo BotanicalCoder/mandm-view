@@ -178,7 +178,7 @@
           <div class="flex flex-col items-start">
             <p class="text-sm"> Debit Source</p>
             <h4 class="font-medium text-base capitalize">
-              {{ data?.data[0].debit_source }}
+              {{ data?.data[0].debit_source || "-" }}
             </h4>
           </div>
 
@@ -192,7 +192,7 @@
                   : 'text-red-700',
               ]"
             >
-              {{ data?.data[0].status }}
+              {{ data?.data[0].status || "-" }}
             </h4>
           </div>
         </div>

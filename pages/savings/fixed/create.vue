@@ -31,6 +31,7 @@
           v-model="fixedSavings.savingsname"
           :errorMsg="fixedSavingsError.savingsname"
           :required="true"
+          pattern="[A-Za-z -]+"
         />
 
         <input-single-select

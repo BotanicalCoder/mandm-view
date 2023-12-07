@@ -24,6 +24,7 @@
           v-model="koloSavings.fullname"
           :errorMsg="koloSavingsError.fullname"
           :required="true"
+          pattern="[A-Za-z -]+"
         />
 
         <!-- email -->

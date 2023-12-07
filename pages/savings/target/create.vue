@@ -24,6 +24,7 @@
           v-model="targetSavings.savingsname"
           :errorMsg="targetSavingsError.savingsname"
           :required="true"
+          pattern="[A-Za-z -]+"
         />
 
         <!-- debit source -->
