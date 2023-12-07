@@ -126,7 +126,7 @@
           name="select-channel"
           z-index-parent=" z-20"
           z-index-child=" z-10"
-          :errorMsg="targetSavingsError.debitday"
+          :errorMsg="targetSavingsError.debitfrequencydate"
         />
 
         <!-- debit amount -->
@@ -202,13 +202,13 @@ const targetSavings = reactive({
     value: "",
   },
   debitfrequencytime: {
-    hours: new Date().getHours(),
-    minutes: new Date().getMinutes,
+    hours: "",
+    minutes: "",
   },
-  debitfrequencydate: new Date(),
+  debitfrequencydate: "",
   debitamount: "",
   targetsavings: "",
-  savetargetdate: new Date(),
+  savetargetdate: "",
   creation_source: "mobile",
   longitude: "2039382",
   latitude: "08090932",
@@ -242,7 +242,7 @@ const validateForm = () => {
     targetSavings.debitfrequency.value == "weekly" &&
     !targetSavings.debitday.value
   ) {
-    targetSavingsError.debitday = "Debit Day is required";
+    targetSavingsError.debitfrequencydate = "Debit Day is required";
     return false;
   } else if (
     targetSavings.debitfrequency.value == "daily" &&
@@ -277,6 +277,23 @@ const savePlan = async () => {
     return;
   }
   loading.value = true;
+
+  let debitFrequency;
+
+  if (targetSavings.debitfrequency.value == "daily") {
+    debitFrequency = moment(targetSavings.debitfrequencytime.hours).format(
+      "HH:mm"
+    );
+  } else if (targetSavings.debitfrequency.value == "weekly") {
+    debitFrequency = targetSavings.debitday.value;
+  } else if (targetSavings.debitfrequency.value == "monthly") {
+    targetSavings.debitfrequencydate != ""
+      ? targetSavings.debitfrequencydate.getDate()
+      : null;
+  } else {
+    null;
+  }
+
   try {
     const { data } = await axiosinstance.post<{
       success: boolean;
@@ -287,14 +304,7 @@ const savePlan = async () => {
       {
         ...targetSavings,
         debitfrequency: targetSavings.debitfrequency.value,
-        debitfrequencytime:
-          targetSavings.debitfrequency.value == "daily"
-            ? moment(targetSavings.debitfrequencytime.hours).format("HH:mm")
-            : targetSavings.debitfrequency.value == "weekly"
-            ? targetSavings.debitday.value
-            : targetSavings.debitfrequency.value == "monthly"
-            ? targetSavings.debitfrequencydate.getDate()
-            : null,
+        debitfrequencytime: debitFrequency,
         debitsource: targetSavings.debitsource.value,
       },
       {
