@@ -34,7 +34,9 @@
 
             <button
               class="border bg-[#3861b4] text-[#ffffff] rounded-lg w-fit p-2 flex items-center gap-2 font-bold mb-0"
-              @click="async () => navigateTo('/savings/target/transactions')"
+              @click="
+                async () => navigateTo('/savings/transact-n-save/transactions')
+              "
             >
               <Icon name="ph:eye-light" size="20" color="#ffffff" />
 

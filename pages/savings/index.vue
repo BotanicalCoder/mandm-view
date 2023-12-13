@@ -16,13 +16,7 @@
           <h3
             class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
           >
-            <Icon
-              name="material-symbols:arrow-back-ios"
-              size="20"
-              color="black"
-              class="cursor-pointer"
-              @click="goBack"
-            />
+
             <span> Saving Plans</span>
           </h3>
 
@@ -84,7 +78,6 @@ import { useMyAuthDataStore } from "../../stores/authData";
 
 const { $decryptKey, $encryptKey } = useNuxtApp();
 const route = useRoute();
-// const dataStore = useMyAuthDataStore();
 
 const dataStore = useMyAuthDataStore();
 

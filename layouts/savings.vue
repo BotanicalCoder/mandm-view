@@ -16,9 +16,9 @@
 const showSpinner = ref(true);
 const { $decryptKey, $encryptKey } = useNuxtApp();
 
-const dataStore = useMyAuthDataStore();
+// const dataStore = useMyAuthDataStore();
 
-const route = useRoute();
+// const route = useRoute();
 
 onBeforeMount(() => {
   showSpinner.value = true;
@@ -28,14 +28,14 @@ onMounted(() => {
   showSpinner.value = false;
 });
 
-watchEffect(() => {
-  if (route?.query?.data) {
-    dataStore.setDataState(
-      JSON.parse(
-        $decryptKey(route.query.data.replace(/-/g, "+").replace(/_/g, "/"))
-        // route?.query?.data
-      )
-    );
-  }
-});
+// watchEffect(() => {
+//   if (route?.query?.data) {
+//     dataStore.setDataState(
+//       JSON.parse(
+//         // $decryptKey(route.query.data.replace(/-/g, "+").replace(/_/g, "/"))
+//         // route?.query?.data
+//       )
+//     );
+//   }
+// });
 </script>

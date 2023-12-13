@@ -115,7 +115,9 @@ const debitUser = async () => {
     console.log(data);
 
     if (data.success) {
-      toast.success(data.message);
+      toast.success(data.message, {
+        onClose: async () => await navigateTo("/savings/kolo"),
+      });
     } else {
       if (data.message) {
         toast.error(data.message);
@@ -124,7 +126,7 @@ const debitUser = async () => {
       toast.error(data.error);
     }
 
-    await navigateTo("/savings/kolo");
+    // await navigateTo("/savings/kolo");
   } catch (error) {
     console.log(error);
     //@ts-ignore

@@ -112,6 +112,7 @@ watchEffect(async () => {
         :multi-calendars="$props.isMulti"
         :range="$props.isMulti"
         :keep-action-row="$props.isMulti"
+        :min-date="new Date(Date.now())"
       >
         <template
           #action-row="{ internalModelValue, selectDate, closePicker }"

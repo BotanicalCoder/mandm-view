@@ -14,46 +14,51 @@
         <h3
           class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
         >
-          Target Savings Transactons
+          <Icon
+            name="material-symbols:arrow-back-ios"
+            size="20"
+            color="black"
+            class="cursor-pointer"
+            @click="goBack"
+          />
+
+          Transactons
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
           <div class="flex flex-col gap-3 mt-4">
             <div
-              class="flex flex-col p-3 border bg-[#3861b4] text-white rounded-lg"
+              class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
               v-for="(transactionsData, index) in transactions"
               @click="
                 async () =>
-                  await navigateTo('/savings/target/' + transactionsData.id)
+                  await navigateTo(
+                    '/savings/transact-n-save/transactions/' +
+                      transactionsData.id
+                  )
               "
+              :key="transactionsData.id"
             >
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-2 gap-2">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <!-- <p> Name </p> -->
                   <h4 class="font-bold capitalize"
-                    >{{ transactionsData.narration }}
+                    >{{ transactionsData.transactandsave.save_label }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p> Date </p>
-                  <h4 class="text-base font-medium">
-                    {{
-                      transactionsData.created_at
-                        ? moment(transactionsData.created_at).format(
-                            "DD, MMMM, YYYY"
-                          )
-                        : "-"
-                    }}
+                  <p> Type </p>
+                  <h4 class="text-base font-medium capitalize">
+                    {{ transactionsData?.transaction_type }}
                   </h4>
                 </div>
 
                 <div class="flex flex-col">
-                  <p> Debit Amount </p>
+                  <p> Amount </p>
                   <h4 class="text-base font-medium">
                     {{
                       formatToCurrency(
-                        parseFloat(transactionsData.debit_amount) || 0,
+                        Number(transactionsData.amount),
                         false,
                         false,
                         "NGN"
@@ -61,28 +66,6 @@
                     }}
                   </h4>
                 </div>
-
-                <!-- <div class="flex flex-col">
-                  <p> Target </p>
-                  <h4 class="text-base font-medium"
-                    >{{ savingsData.save_target }}
-                  </h4>
-                </div>
-
-      
-                <div class="flex flex-col">
-                  <p> Interest Earned </p>
-                  <h4 class="text-base font-medium">
-                    {{
-                      formatToCurrency(
-                        savingsData.interest_sum_amount_paid || 0,
-                         false,
-                        false,
-                        "NGN"
-                      )
-                    }}
-                  </h4>
-                </div> -->
               </div>
             </div>
 
@@ -102,30 +85,33 @@
 
 <script setup lang="ts">
 import moment from "moment";
+import { useMyAuthDataStore } from "../../../../stores/authData";
 
-interface Target_Savings {
+interface Transact_N_Save {
   id: number;
   end_date: Date;
+  debit_amount: string;
   save_label: string;
   date_created: Date;
+  transaction_type: string[];
 }
 
 interface Datum {
-  id: number;
-  reference: string;
-  debit_reference: string;
   amount: string;
-  oldbal: string;
-  newbal: string;
-  debit_source: string;
-  narration: string;
-  status: string;
   created_at: Date;
-  updated_at: Date;
+  debit_reference: string;
+  id: number;
+  narration: string;
+  newbal: string;
+  oldbal: string;
+  reference: string;
   savings_id: number;
+  status: string;
   tid: string;
-  debit_amount: string;
-  target_savings: Target_Savings;
+  trans_amount: string;
+  transactandsave: Transact_N_Save;
+  transaction_type: string;
+  updated_at: Date;
 }
 
 interface RootObj {
@@ -140,28 +126,13 @@ interface RootObj {
   data: Datum[];
 }
 
-const userToken = ref<string | null>(null);
+const dataStore = useMyAuthDataStore();
+
+const userToken = ref<string | null>(dataStore.token);
 const transactions = ref<Datum[]>([]);
 const currentPage = ref(1);
-
-// watchEffect(async () => {
-//   try {
-//     const data = axiosinstance.get("savings/view-target-transactions", {
-//       headers: {
-//         Authorization: "Bearer " + userToken.value,
-//       },
-//       params: {
-//         is_single_record: false,
-//         longitude: "2039382",
-//         latitude: "08090932",
-//       },
-//     });
-//     console.log(userToken.value);
-//     console.log(await data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+const $router = useRouter();
+const goBack = () => $router.back();
 
 const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
@@ -176,11 +147,11 @@ const { data, pending, error } = useFetch<RootObj>(
     },
     params: {
       is_single_record: false,
-      longitude: "2039382",
-      latitude: "08090932",
+      longitude: dataStore.longitude,
+      latitude: dataStore.latitude,
       page: currentPage.value,
     },
-    key: "all-target-savings-transactions",
+    key: "all-transact-n-save-transactions",
     server: false,
     watch: [currentPage],
   }

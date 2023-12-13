@@ -19,7 +19,7 @@
           label="Savings Name"
           placeholder="Savings Name"
           v-model="transactNSave.savingsname"
-          pattern="[A-Za-z -]+"
+          pattern="[A-Za-z \-]+"
           :errorMsg="transactNSaveError.savingsname"
         />
 
@@ -182,11 +182,13 @@ const savePlan = async () => {
     console.log(data);
 
     if (data.success) {
-      toast.success(data.message);
+      toast.success(data.message, {
+        onClose: async () => await navigateTo("/savings/transact-n-save"),
+      });
     } else {
       toast.error(data.message);
     }
-    await navigateTo("/savings/transact-n-save");
+    // await navigateTo("/savings/transact-n-save");
   } catch (error) {
     console.log(error);
     //@ts-ignore

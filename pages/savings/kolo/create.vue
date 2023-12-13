@@ -24,7 +24,7 @@
           v-model="koloSavings.fullname"
           :errorMsg="koloSavingsError.fullname"
           :required="true"
-          pattern="[A-Za-z -]+"
+          pattern="[A-Za-z \-]+"
         />
 
         <!-- email -->
@@ -77,7 +77,8 @@
         <!-- phone number -->
         <input-text
           type="tel"
-          pattern="^(?:(?:\+|0)?(?:234\s?)?0)([789]\d{2}|\d{3})[- ]?\d{3}[- ]?\d{3}$"
+          pattern="^234([89][01]|70)\d{8}$"
+          title="Maximum length is 14 and Phone number must start with 234 followed by one of 80, 81, 90, 91 or 70 And must be all numeric"
           label="Phone"
           placeholder="Enter Phone no. e.g 2348012345678 "
           v-model="koloSavings.phone"
@@ -176,7 +177,7 @@ const savePlan = async () => {
 
   try {
     const { data } = await axiosinstance.post<{
-      success: boolean;
+      success: string;
       message: string;
       id: number;
     }>(
@@ -193,11 +194,13 @@ const savePlan = async () => {
     );
 
     if (data.success) {
-      toast.success(data.message);
+      toast.success(data.success, {
+        onClose: async () => await navigateTo("/savings/kolo"),
+      });
     } else {
       toast.error(data.message);
     }
-    await navigateTo("/savings/kolo");
+    // await navigateTo("/savings/kolo");
   } catch (error) {
     console.log(error);
     //@ts-ignore

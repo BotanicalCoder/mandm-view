@@ -31,7 +31,7 @@
           v-model="fixedSavings.savingsname"
           :errorMsg="fixedSavingsError.savingsname"
           :required="true"
-          pattern="[A-Za-z -]+"
+          pattern="[A-Za-z \-]+"
         />
 
         <input-single-select
@@ -234,7 +234,9 @@ const savePlan = async () => {
     console.log(data);
 
     if (data.success) {
-      toast.success(data.message);
+      toast.success(data.message, {
+        onClose: async () => await navigateTo("/savings/fixed"),
+      });
     } else {
       if (data.message) {
         return toast.error(data.message);
@@ -244,7 +246,7 @@ const savePlan = async () => {
       }
     }
 
-    await navigateTo("/savings/fixed");
+    // await navigateTo("/savings/fixed");
   } catch (error) {
     console.log(error);
     // @ts-ignore

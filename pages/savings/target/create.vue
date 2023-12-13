@@ -24,7 +24,7 @@
           v-model="targetSavings.savingsname"
           :errorMsg="targetSavingsError.savingsname"
           :required="true"
-          pattern="[A-Za-z -]+"
+          pattern="[A-Za-z \-]+"
         />
 
         <!-- debit source -->
@@ -315,11 +315,13 @@ const savePlan = async () => {
     );
 
     if (data.success) {
-      toast.success(data.message);
+      toast.success(data.message, {
+        onClose: async () => await navigateTo("/savings/target"),
+      });
     } else {
       toast.error(data.message);
     }
-    await navigateTo("/savings/target");
+    // await navigateTo("/savings/target");
   } catch (error) {
     console.log(error);
     // @ts-ignore
