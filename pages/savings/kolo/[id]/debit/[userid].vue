@@ -2,40 +2,20 @@
   <div>
     <NuxtLayout name="savings">
       <form class="flex flex-col p-4 gap-4" @submit.prevent="debitUser">
-        <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
-        >
-          <Icon
-            name="material-symbols:arrow-back-ios"
-            size="20"
-            color="black"
-            class="cursor-pointer"
-            @click="goBack"
-          />
+        <h3 class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black">
+          <Icon name="material-symbols:arrow-back-ios" size="20" color="black" class="cursor-pointer" @click="goBack" />
 
           Debit User
         </h3>
 
-        <input-text
-          type="number"
-          label="Amount"
-          placeholder="Enter amount no. "
-          v-model="koloSavings.amount"
-          :errorMsg="koloSavingsError.amount"
-          :required="true"
-        />
+        <input-text type="number" label="Amount" placeholder="Enter amount no. " v-model="koloSavings.amount"
+          :errorMsg="koloSavingsError.amount" :required="true" />
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          type="submit"
-        >
-          <Icon
-            :name="
-              loading ? 'line-md:loading-twotone-loop' : 'fluent:add-12-filled'
-            "
-            size="20"
-            color="white"
-          />
+          type="submit">
+          <Icon :name="loading ? 'line-md:loading-twotone-loop' : 'fluent:add-12-filled'
+            " size="20" color="white" />
           {{ loading ? "Making transfer.." : "Make transfer" }}
         </button>
       </form>
@@ -93,9 +73,10 @@ const debitUser = async () => {
 
   try {
     const { data } = await axiosinstance.post<{
-      success: boolean;
-      message: string;
       id: number;
+      success: string;
+      message: string;
+      error?: string;
     }>(
       "savings/create-koloajo-operations",
       {
@@ -112,18 +93,17 @@ const debitUser = async () => {
       }
     );
 
-    console.log(data);
 
     if (data.success) {
-      toast.success(data.message, {
+      let successMsg = data.message || data.success;
+
+      toast.success(successMsg as string, {
         onClose: async () => await navigateTo("/savings/kolo"),
       });
     } else {
-      if (data.message) {
-        toast.error(data.message);
-      }
-      //@ts-ignore
-      toast.error(data.error);
+      let errorMsg = data.message || data.error;
+
+      toast.error(errorMsg as string);
     }
 
     // await navigateTo("/savings/kolo");

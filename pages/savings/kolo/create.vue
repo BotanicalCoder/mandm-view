@@ -2,101 +2,48 @@
   <div>
     <NuxtLayout name="savings">
       <form class="flex flex-col p-4 gap-4" @submit.prevent="savePlan">
-        <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
-        >
-          <Icon
-            name="material-symbols:arrow-back-ios"
-            size="20"
-            color="black"
-            class="cursor-pointer"
-            @click="goBack"
-          />
+        <h3 class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black">
+          <Icon name="material-symbols:arrow-back-ios" size="20" color="black" class="cursor-pointer" @click="goBack" />
 
           Create User
         </h3>
 
         <!-- fullname -->
-        <input-text
-          type="text"
-          label="Full Name"
-          placeholder="Full Name"
-          v-model="koloSavings.fullname"
-          :errorMsg="koloSavingsError.fullname"
-          :required="true"
-          pattern="[A-Za-z \-]+"
-        />
+        <input-text type="text" label="Full Name" placeholder="Full Name" v-model="koloSavings.fullname"
+          :errorMsg="koloSavingsError.fullname" :required="true" pattern="[A-Za-z \-]+" />
 
         <!-- email -->
-        <input-text
-          type="email"
-          label="Email"
-          placeholder="Email"
-          v-model="koloSavings.email"
-          :errorMsg="koloSavingsError.email"
-          :required="true"
-        />
+        <input-text type="email" label="Email" placeholder="Email" v-model="koloSavings.email"
+          :errorMsg="koloSavingsError.email" :required="true" />
 
         <!-- amount -->
-        <input-text
-          type="number"
-          label="Save Amount"
-          placeholder="Enter Amount "
-          v-model="koloSavings.creditamount"
-          :errorMsg="koloSavingsError.creditamount"
-          :required="true"
-        />
+        <input-text type="number" label="Save Amount" placeholder="Enter Amount " v-model="koloSavings.creditamount"
+          :errorMsg="koloSavingsError.creditamount" :required="true" />
 
         <!-- address -->
-        <input-text
-          label="Address"
-          placeholder="Address"
-          v-model="koloSavings.address"
-          type="text"
-          :errorMsg="koloSavingsError.address"
-          :required="true"
-        />
+        <input-text label="Address" placeholder="Address" v-model="koloSavings.address" type="text"
+          :errorMsg="koloSavingsError.address" :required="true" />
 
         <!-- debit source -->
-        <input-single-select
-          class="z-10"
-          :options="[
-            {
-              label: 'Wallet',
-              value: 'wallet',
-            },
-          ]"
-          label="Debit source"
-          v-model="koloSavings.debitsource"
-          name="select-channel"
-          z-index-parent=" z-30"
-          z-index-child=" z-20"
-          :errorMsg="koloSavingsError.debitsource"
-        />
+        <input-single-select class="z-10" :options="[
+          {
+            label: 'Wallet',
+            value: 'wallet',
+          },
+        ]" label="Debit source" v-model="koloSavings.debitsource" name="select-channel" z-index-parent=" z-30"
+          z-index-child=" z-20" :errorMsg="koloSavingsError.debitsource" />
 
         <!-- phone number -->
-        <input-text
-          type="tel"
-          pattern="^234([89][01]|70)\d{8}$"
+        <input-text type="tel" pattern="^234([89][01]|70)\d{8}$"
           title="Maximum length is 14 and Phone number must start with 234 followed by one of 80, 81, 90, 91 or 70 And must be all numeric"
-          label="Phone"
-          placeholder="Enter Phone no. e.g 2348012345678 "
-          v-model="koloSavings.phone"
-          :errorMsg="koloSavingsError.phone"
-          :required="true"
-        />
+          label="Phone" placeholder="Enter Phone no. e.g 2348012345678 " v-model="koloSavings.phone"
+          :errorMsg="koloSavingsError.phone" :required="true" />
 
         <button
           class="border bg-[#3861b4] text-[white] rounded-lg w-full p-2 flex items-center justify-center gap-2 font-bold mb-0"
-          type="submit"
-        >
-          <Icon
-            :name="
-              loading ? 'line-md:loading-twotone-loop' : 'fluent:add-12-filled'
-            "
-            size="20"
-            color="white"
-          />
+          type="submit">
+          <Icon :name="loading ? 'line-md:loading-twotone-loop' : 'fluent:add-12-filled'
+            " size="20" color="white" />
           {{ loading ? "Saving.." : "Save User" }}
         </button>
       </form>
@@ -177,9 +124,10 @@ const savePlan = async () => {
 
   try {
     const { data } = await axiosinstance.post<{
-      success: string;
-      message: string;
       id: number;
+      success: string;
+      message?: string;
+      error?: string;
     }>(
       "savings/create-kolo-savings",
       {
@@ -194,11 +142,16 @@ const savePlan = async () => {
     );
 
     if (data.success) {
-      toast.success(data.success, {
+
+      let successMsg = data.message || data.success;
+
+      toast.success(successMsg as string, {
         onClose: async () => await navigateTo("/savings/kolo"),
       });
     } else {
-      toast.error(data.message);
+      let errMsg = data.message || data.error
+
+      toast.error(errMsg as string);
     }
     // await navigateTo("/savings/kolo");
   } catch (error) {
