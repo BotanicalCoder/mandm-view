@@ -1,48 +1,28 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div
-        class="w-full h-screen flex items-center justify-center"
-        v-if="pending"
-      >
+      <div class="w-full h-screen flex items-center justify-center" v-if="pending">
         <Icon name="line-md:loading-twotone-loop" size="90" />
       </div>
-      <div
-        class="flex flex-col justify-center p-4 gap-2 text-[#00339986]"
-        v-else
-      >
-        <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
-        >
-          <Icon
-            name="material-symbols:arrow-back-ios"
-            size="20"
-            color="black"
-            class="cursor-pointer"
-            @click="goBack"
-          />
+      <div class="flex flex-col justify-center p-4 gap-2 text-[#00339986]" v-else>
+        <h3 class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black">
+          <Icon name="material-symbols:arrow-back-ios" size="20" color="black" class="cursor-pointer" @click="goBack" />
 
-          Transactons
+          Transactions
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
           <div class="flex flex-col gap-3 mt-4">
-            <div
-              class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
-              v-for="(transactionsData, index) in transactions"
-              @click="
-                async () =>
-                  await navigateTo(
-                    '/savings/transact-n-save/transactions/' +
-                      transactionsData.id
-                  )
-              "
-              :key="transactionsData.id"
-            >
+            <div class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
+              v-for="(transactionsData, index) in transactions" @click="async () =>
+                await navigateTo(
+                  '/savings/transact-n-save/transactions/' +
+                  transactionsData.id
+                )
+                " :key="transactionsData.id">
               <div class="grid grid-cols-2 gap-2">
                 <div class="flex flex-col col-span-2 text-lg">
-                  <h4 class="font-bold capitalize"
-                    >{{ transactionsData.transactandsave.save_label }}
+                  <h4 class="font-bold capitalize">{{ transactionsData.transactandsave.save_label }}
                   </h4>
                 </div>
 
@@ -69,11 +49,7 @@
               </div>
             </div>
 
-            <button
-              class="w-fit border p-3 rounded-xl my-8 mx-auto"
-              @click="loadNextPage"
-              v-if="data?.next_page_url"
-            >
+            <button class="w-fit border p-3 rounded-xl my-8 mx-auto" @click="loadNextPage" v-if="data?.next_page_url">
               {{ pending ? "Loading......" : "Load more" }}
             </button>
           </div>
@@ -138,31 +114,46 @@ const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
 
-const { data, pending, error } = useFetch<RootObj>(
-  "https://kams.kolomoni.ng/api/savings/view-transact-and-save-transactions",
-  {
+const { data, pending, error } = await useAsyncData<RootObj>(
+  'all-transact-n-save-transactions',
+  () => $fetch("https://kams.kolomoni.ng/api/savings/view-transact-and-save-transactions", {
     method: "get",
     headers: {
       Authorization: "Bearer " + userToken.value,
     },
     params: {
       is_single_record: false,
-      longitude: dataStore.longitude,
-      latitude: dataStore.latitude,
+      longitude: "2039382",
+      latitude: "08090932",
       page: currentPage.value,
-    },
-    key: "all-transact-n-save-transactions",
-    server: false,
-    watch: [currentPage],
-  }
-);
+    }
+  }), {
+  server: false,
+  watch: [currentPage]
+}
+)
+
+function removeDuplicates(data: any) {
+
+  let allData = [...data, ...transactions.value];
+
+  //@ts-ignore
+  let jsonObject = allData.map(JSON.stringify);
+
+
+  let uniqueSet = new Set(jsonObject);
+  //@ts-ignore
+  let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+
+  return uniqueArray;
+}
 
 watchEffect(() => {
   if (data.value) {
-    transactions.value.splice(0, 0, ...data.value?.data);
+    transactions.value = removeDuplicates(data.value?.data);
   }
-  console.log(transactions.value);
 });
+
 </script>
 
 <style scoped></style>

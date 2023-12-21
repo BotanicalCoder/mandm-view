@@ -1,48 +1,30 @@
 <template>
   <div>
     <NuxtLayout name="savings">
-      <div
-        class="w-full h-screen flex items-center justify-center"
-        v-if="pending"
-      >
+      <div class="w-full h-screen flex items-center justify-center" v-if="pending">
         <Icon name="line-md:loading-twotone-loop" size="90" />
       </div>
-      <div
-        class="flex flex-col justify-center p-4 gap-2 text-[#00339986]"
-        v-else
-      >
-        <h3
-          class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
-        >
-          <Icon
-            name="material-symbols:arrow-back-ios"
-            size="20"
-            color="black"
-            class="cursor-pointer"
-            @click="goBack"
-          />
+      <div class="flex flex-col justify-center p-4 gap-2 text-[#00339986]" v-else>
+        <h3 class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black">
+          <Icon name="material-symbols:arrow-back-ios" size="20" color="black" class="cursor-pointer" @click="goBack" />
           <span> Kolo Savings Transactons </span>
         </h3>
 
         <div class="px-0 flex flex-col gap-3">
           <div class="flex flex-col gap-3 mt-4">
-            <div
-              class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
-              v-for="(transactionsData, index) in transactions"
-              @click="
-                async () =>
-                  await navigateTo(
-                    '/savings/kolo/transactions/' + transactionsData.id
-                  )
-              "
-            >
+            <div class="flex flex-col p-3 border bg-[#ffffff] text-black rounded-lg"
+              v-for="(transactionsData, index) in transactions" @click="async () =>
+                await navigateTo(
+                  '/savings/kolo/transactions/' + transactionsData.id
+                )
+                ">
               <div class="grid grid-cols-2 gap-3">
                 <div class="flex flex-col col-span-2 text-lg">
                   <h4 class="font-bold capitalize">
                     {{
                       transactionsData.users_id
-                        ? transactionsData.narration + " - (User Copy)"
-                        : transactionsData.narration
+                      ? transactionsData.narration + " - (User Copy)"
+                      : transactionsData.narration
                     }}
                   </h4>
                 </div>
@@ -52,10 +34,10 @@
                   <h4 class="text-base font-medium">
                     {{
                       transactionsData.created_at
-                        ? moment(transactionsData.created_at).format(
-                            "DD, MMMM, YYYY"
-                          )
-                        : "-"
+                      ? moment(transactionsData.created_at).format(
+                        "DD, MMMM, YYYY"
+                      )
+                      : "-"
                     }}
                   </h4>
                 </div>
@@ -76,28 +58,16 @@
               </div>
             </div>
 
-            <button
-              class="w-fit border p-3 rounded-xl my-8 mx-auto"
-              @click="loadNextPage"
-              v-if="data?.next_page_url"
-            >
+            <button class="w-fit border p-3 rounded-xl my-8 mx-auto" @click="loadNextPage" v-if="data?.next_page_url">
               {{ pending ? "Loading......" : "Load more" }}
             </button>
           </div>
         </div>
       </div>
 
-      <div
-        class="h-screen flex justify-center items-center relative"
-        v-if="transactions.length !== 0"
-      >
-        <Icon
-          name="material-symbols:arrow-back-ios"
-          size="20"
-          color="black"
-          class="cursor-pointer absolute top-4 left-4"
-          @click="goBack"
-        />
+      <div class="h-screen flex justify-center items-center relative" v-if="transactions.length == 0">
+        <Icon name="material-symbols:arrow-back-ios" size="20" color="black" class="cursor-pointer absolute top-4 left-4"
+          @click="goBack" />
 
         <h3 class="font-medium font-2xl"> No Transactions </h3>
       </div>
@@ -161,9 +131,9 @@ const loadNextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
 
-const { data, pending, error } = useFetch<RootObject>(
-  "https://kams.kolomoni.ng/api/savings/view-kolo-savings-transactions",
-  {
+const { data, pending, error } = await useAsyncData<RootObject>(
+  'all-kolo-savings-transactions',
+  () => $fetch('https://kams.kolomoni.ng/api/savings/view-kolo-savings-transactions', {
     method: "get",
     headers: {
       Authorization: "Bearer " + userToken.value,
@@ -173,15 +143,18 @@ const { data, pending, error } = useFetch<RootObject>(
       longitude: "2039382",
       latitude: "08090932",
       page: currentPage.value,
-    },
-    key: "all-target-savings-transactions",
-    server: false,
-    watch: [currentPage],
-  }
-);
+    }
+  }), {
+  server: false,
+  watch: [currentPage]
+}
+)
 
 function removeDuplicates(data: any) {
-  let jsonObject = data.map(JSON.stringify);
+  let allData = [...data, ...transactions.value];
+
+  //@ts-ignore
+  let jsonObject = allData.map(JSON.stringify);
   let uniqueSet = new Set(jsonObject);
   //@ts-ignore
   let uniqueArray = Array.from(uniqueSet).map(JSON.parse);
