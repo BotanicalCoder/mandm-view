@@ -2,50 +2,30 @@
   <div>
     <NuxtLayout name="savings">
       <div>
-        <div
-          class="w-full h-screen flex items-center justify-center"
-          v-if="pending"
-        >
+        <div class="w-full h-screen flex items-center justify-center" v-if="pending">
           <Icon name="line-md:loading-twotone-loop" size="90" />
         </div>
 
-        <div
-          class="flex flex-col justify-center p-4 gap-5 text-[#003399]"
-          v-else
-        >
-          <h3
-            class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black"
-          >
+        <div class="flex flex-col justify-center p-4 gap-5 text-[#003399]" v-else>
+          <h3 class="font-bold text-[1.5rem] flex items-center gap-2 pb-0 text-black">
 
             <span> Saving Plans</span>
           </h3>
 
-          <div
-            v-if="error"
-            class="w-full h-screen flex items-center justify-center"
-          >
+          <div v-if="error" class="w-full h-screen flex items-center justify-center">
             <p class="text-black text-xl"> Something went wrong </p>
           </div>
 
           <div class="px-0 flex flex-col gap-3" v-else>
             <div class="flex flex-col gap-3 divide-y border-t">
-              <div
-                class="flex gap-3 pt-2 bg-[#ffffff] text-black p-2 rounded-lg"
-                v-for="plan in data"
-                :key="plan.id"
-                @click="async () => await navigateTo(getLinks(plan.save_type))"
-              >
-                <Icon
-                  :name="getIcons(plan.save_type)"
-                  size="40"
-                  color="#3861b4"
-                />
+              <div class="flex gap-3 pt-2 bg-[#ffffff] text-black p-2 rounded-lg" v-for="plan in data" :key="plan.id"
+                @click="async () => await navigateTo(getLinks(plan.save_type))">
+                <Icon :name="getIcons(plan.save_type)" size="40" color="#3861b4" />
 
                 <div class="flex items-center gap-2">
                   <div class="flex flex-col">
                     <div class="flex flex-col">
-                      <h4 class="text-base font-medium capitalize"
-                        >{{ plan.saveDisplayName }}
+                      <h4 class="text-base font-medium capitalize">{{ plan.saveDisplayName }}
                       </h4>
 
                       <!-- plan description -->
@@ -53,10 +33,7 @@
                       >Save a part of your earnings</p
                     > -->
                     </div>
-                    <p
-                      class="font-medium text-sm text-black"
-                      v-if="plan.interest_rate"
-                    >
+                    <p class="font-medium text-sm text-black" v-if="plan.interest_rate">
                       {{ plan.interest_rate }}% Interest
                     </p>
                   </div>
